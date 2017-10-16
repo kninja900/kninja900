@@ -6,7 +6,7 @@
   "version": "1.0",
 
   "browser_action": {
-    "default_popup": "index.html",
+    "default_popup": "popup.html",
 	"default_title": "Kninja9000",
 	"default_icon": "popup.png"
   },
