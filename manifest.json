@@ -1,9 +1,27 @@
 {
-  "name": "Hello World!",
-  "version": "1.0",
   "manifest_version": 2,
-  "description": "Second Chrome extension.",
+
+  "name": "Alert",
+  "description": "Instgram Alert Message",
+  "version": "1.0",
+
   "browser_action": {
-    "default_popup": "popup.html"
-  }
+    "default_popup": "popup.html",
+	"default_title": "Kninja9000",
+	"default_icon": "popup.png"
+  },
+    "background": {
+    "scripts": ["background.js"]
+  },
+  "permissions": [
+	"notifications",
+    "activeTab",
+    "storage"
+  ],
+   "content_scripts": [
+    {
+      "matches": ["*://www.instagram.com/*"],
+      "js": ["myScript.js"]
+    }
+  ]
 }

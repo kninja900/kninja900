@@ -1,0 +1,1 @@
+chrome.runtime.sendMessage(document.getElementsByTagName("title")[0].innerText + ". You can run the extension off of this page");
