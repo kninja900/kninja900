@@ -1,7 +1,7 @@
 chrome.runtime.sendMessage({ifInstagram : true}, function(response) {
     if(window.location.href.indexOf("instagram.com") > -1) {
-        // var expression = /(instagram.com\/)([a-z0-9_-])/;
-        var regex = new RegExp(/(instagram.com\/)([a-z0-9_-])/);
+        var exp = "instagram\.com\/([\.a-z0-9_-]+?)\/$";
+        var regex = new RegExp(exp); //instagram.com/[user]/
         if (regex.test(window.location.href)){
             alert("regex works, can put logic for recognizing an instagram user here");
             $.getJSON(window.location.href + "media/", function(data) {
