@@ -7,7 +7,7 @@
 
   "browser_action": {
     "default_popup": "popup.html",
-	"default_title": "Kninja9000",
+	"default_title": "Mavrck IG-Tool",
 	"default_icon": "popup.png"
   },
     "background": {
@@ -20,7 +20,7 @@
   ],
    "content_scripts": [
     {
-      "matches": ["*://www.instagram.com/*"],
+      "matches": ["https://www.instagram.com/*"],
       "js": ["myScript.js"]
     }
   ]
