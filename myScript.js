@@ -16,4 +16,16 @@ chrome.runtime.sendMessage({ifInstagram : true}, function(response) {
     }
 });
 
-//chrome.runtime.sendMessage(document.getElementsByTagName("title")[0].innerText + ". You can run the extension off of this page");
+// Scraping Email from Bio
+// Need to replace static text with Bio from instagram API
+var bio = "this is a test mjsevey@gmail.com for the funcion"
+
+function extractEmails (bio)
+{
+    // Need to change console.log to return so that function can be called
+    // and value returned from elsewhere in the code
+    console.log(bio.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi));
+}
+
+// Call extractEmails Function
+extractEmails(bio);

@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
 
-  "name": "Alert",
-  "description": "Instagram Alert Message",
+  "name": "Mavrck Instagram Extension",
+  "description": "Pulls data from instagram profiles",
   "version": "1.0",
 
   "browser_action": {
