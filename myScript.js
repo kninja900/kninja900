@@ -5,7 +5,7 @@ chrome.runtime.sendMessage({ifInstagram : true}, function(response) {
         if (regex.test(window.location.href)){
             alert("regex works, can put logic for recognizing an instagram user here");
             // calling mediaJSON function to console.log JSON element
-            mediaJSON();
+            console.log(mediaJSON());
         }
         alert("you are on an instagram page when you refresh the page");
     }
@@ -13,19 +13,24 @@ chrome.runtime.sendMessage({ifInstagram : true}, function(response) {
 
 // Pulling getJSON for /media out so it can be reused
 function mediaJSON() {
-  $.getJSON(window.location.href + "media/", function(data) {
-      //data is the JSON string
-      console.log("getJSON working. JSON Data: ");
-      //Check console, you'll see the data from the JSON on the instagram.com/[user]/media/ show up
-      console.log(data);
+  var json;
+  // Using .ajax so that async can be set to false allowing for returning the
+  // json element from the function
+  $.ajax({
+    url: window.location.href + "media/",
+    dataType: 'json',
+    async: false,
+    // data: myData,  // unused right now.  leaving in for reference
+    success: function(data) {
+      json = data
+    }
   });
+  return json;
 }
-
-
 
 // Scraping Email from Bio
 // Need to replace static text with Bio from instagram API
-var bio = "this is a test mjsevey@gmail.com for the funcion, but what about second@email.com"
+var bio = "this is a test mjsevey@gmail.com for the funcion, but what about second@email.com";
 
 function extractEmails (bio)
 {
