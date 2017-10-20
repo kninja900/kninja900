@@ -18,7 +18,7 @@ chrome.runtime.sendMessage({ifInstagram : true}, function(response) {
 
 // Scraping Email from Bio
 // Need to replace static text with Bio from instagram API
-var bio = "this is a test mjsevey@gmail.com for the funcion"
+var bio = "this is a test mjsevey@gmail.com for the funcion, but what about second@email.com"
 
 function extractEmails (bio)
 {
