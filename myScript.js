@@ -3,19 +3,18 @@ chrome.runtime.sendMessage({ifInstagram : true}, function(response) {
         var exp = "instagram\.com\/([\.a-z0-9_-]+?)\/$";
         var regex = new RegExp(exp); //instagram.com/[user]/
         if (regex.test(window.location.href)){
-            alert("regex works, can put logic for recognizing an instagram user here");
+            // alert("regex works, can put logic for recognizing an instagram user here");
             // calling mediaJSON function to console.log JSON element
             console.log(mediaJSON());
         }
-        alert("you are on an instagram page when you refresh the page");
+        // alert("you are on an instagram page when you refresh the page");
     }
 });
 
 // Pulling getJSON for /media out so it can be reused
 function mediaJSON() {
   var json;
-  // Using .ajax so that async can be set to false allowing for returning the
-  // json element from the function
+  // Using .ajax so that async can be set to false allowing for returning the json element from the function
   $.ajax({
     url: window.location.href + "media/",
     dataType: 'json',
