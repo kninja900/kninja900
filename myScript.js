@@ -40,3 +40,15 @@ function extractEmails (bio)
 
 // Call extractEmails Function
 extractEmails(bio);
+
+// Scraping URLs bioLinks
+
+var bioLinks = "I'm going to test this out to see if youtube.com/RobLipsett and https://stackoverflow.com/questions/27916055/whats-the-meaning-of-gi-in-a-regex return as clickable links"
+
+
+function extractWebsite (bioLinks)
+{
+  console.log(bioLinks.match(/[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi));
+}
+
+extractWebsite(bioLinks);
