@@ -18,9 +18,10 @@
   "permissions": [
 	   "notifications",
      "activeTab",
-     "storage"
+     "storage",
+     "https://api.instagram.com/*"
   ],
-  
+
    "content_scripts": [
     {
       "matches": ["https://www.instagram.com/*"],
