@@ -19,7 +19,8 @@
 	   "notifications",
      "activeTab",
      "storage",
-     "https://api.instagram.com/*"
+     "https://api.instagram.com/*",
+     "tabs"
   ],
 
    "content_scripts": [

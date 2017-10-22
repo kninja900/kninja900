@@ -9,6 +9,7 @@ chrome.runtime.sendMessage({ifInstagram : true}, function(response) {
             console.log(mediaJSON());
         }
         // alert("you are on an instagram page when you refresh the page");
+
     }
 });
 
@@ -56,37 +57,3 @@ chrome.runtime.sendMessage({ifInstagram : true}, function(response) {
   }
 
   extractWebsite(bioLinks);
-
-// Generating access token
-  // Is there a way to better store this variables so they are not hard coded in the code?
-  var client_ID = '99c741452a6e4d84a1320831f3db56e1';
-  var redirect_uri = 'https://www.instagram.com/';
-
-  // Access the client id and redirect uri to build the url http request
-  function accessToken(clientID, redirectURI) {
-    var at;
-    // Using .ajax so that async can be set to false allowing for returning the json element from the function
-    $.ajax({
-      type: 'GET',
-      url: 'https://api.instagram.com/oauth/authorize/?client_id='+ clientID +
-          '&redirect_uri='+ redirectURI +'&response_type=token',
-      // data: 'json', //date type sent to the server
-      dataType: 'html', //data type expected back from server
-      async: true, //needs to be true to try and access different URL - get CORS error
-      cache: false,
-      // data: myData,  // unused right now.  leaving in for reference
-      success: function(data) {
-        console.log("This is the success response from accessToken");
-        console.log("Data from within accessToken");
-        at = data;
-      },
-      error: function(data) {
-        console.log("There was an error with accessToken");
-        console.log(data);
-      }
-    });
-    return at;
-  }
-
-  console.log("Here is the data from accessToken");
-  console.log(accessToken(client_ID, redirect_uri));
