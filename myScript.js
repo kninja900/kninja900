@@ -38,6 +38,17 @@ chrome.runtime.sendMessage({ifInstagram : true}, function(response) {
       // and value returned from elsewhere in the code
       console.log("These are the emails that were extracted");
       console.log(bio.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi));
+
+      // var emails = bio.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi);
+      // var obj;
+      // for (var i = 0; i < emails.length; i++) {
+      //   if ($.isEmptyObject(obj)) {
+      //     obj = {`email${i}`: emails[i]};
+      //   } else {
+      //
+      //   }
+      //
+      // }
   }
 
   // Call extractEmails Function
