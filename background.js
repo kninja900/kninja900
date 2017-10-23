@@ -9,6 +9,11 @@ chrome.runtime.onMessage.addListener(function(response, sender, sendResponse) {
         '&redirect_uri='+ redirect_uri +'&response_type=token';
 
     chrome.tabs.create({ "url": url, "index": 0 }, function(tab) {
-      alert(tab.url);
+
+      // this is evaluating to false
+      if (tab.status == "complete") {
+        alert(tab.url);
+
+      }
     });
 });
