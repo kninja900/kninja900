@@ -8,5 +8,7 @@ chrome.runtime.onMessage.addListener(function(response, sender, sendResponse) {
     var url = 'https://api.instagram.com/oauth/authorize/?client_id='+ client_ID +
         '&redirect_uri='+ redirect_uri +'&response_type=token';
 
-    chrome.tabs.create({ "url": url, "index": 0 });
+    chrome.tabs.create({ "url": url, "index": 0 }, function(tab) {
+      alert(tab.url);
+    });
 });
