@@ -7,6 +7,8 @@ chrome.runtime.sendMessage({ifInstagram : true}, function(response) {
             // calling mediaJSON function to console.log JSON element
             console.log("This is the JSON object from /media/");
             console.log(mediaJSON());
+            console.log("This is the JSON object from /?__a=1");
+            console.log(userJSON());
         }
         // alert("you are on an instagram page when you refresh the page");
 
@@ -19,6 +21,20 @@ chrome.runtime.sendMessage({ifInstagram : true}, function(response) {
     // Using .ajax so that async can be set to false allowing for returning the json element from the function
     $.ajax({
       url: window.location.href + "media/",
+      dataType: 'json', //data type received from server
+      async: false, //set to false so that value can be returned
+      success: function(data) {
+        json = data
+      }
+    });
+    return json;
+  }
+
+  function userJSON() {
+    var json;
+    // Using .ajax so that async can be set to false allowing for returning the json element from the function
+    $.ajax({
+      url: window.location.href + "?__a=1",
       dataType: 'json', //data type received from server
       async: false, //set to false so that value can be returned
       success: function(data) {
