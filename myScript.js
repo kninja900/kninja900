@@ -6,7 +6,7 @@ chrome.runtime.sendMessage({ifInstagram : true}, function(response) {
         var regex = new RegExp(exp); //instagram.com/[user]/
         if (regex.test(window.location.href)){
             // alert("regex works, can put logic for recognizing an instagram user here");
-          
+
             // calling mediaJSON function to console.log JSON element
             console.log("This is the JSON object from /media/");
             console.log(mediaJSON());
@@ -56,17 +56,6 @@ chrome.runtime.sendMessage({ifInstagram : true}, function(response) {
       // and value returned from elsewhere in the code
       console.log("These are the emails that were extracted");
       console.log(bio.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi));
-
-      // var emails = bio.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi);
-      // var obj;
-      // for (var i = 0; i < emails.length; i++) {
-      //   if ($.isEmptyObject(obj)) {
-      //     obj = {`email${i}`: emails[i]};
-      //   } else {
-      //
-      //   }
-      //
-      // }
   }
 
   // Call extractEmails Function
@@ -81,22 +70,22 @@ chrome.runtime.sendMessage({ifInstagram : true}, function(response) {
   {
     // Need to change console.log to return so that function can be called
     // and value returned from elsewhere in the code
-	var foundSites = bioLinks.match(/[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi);
-	var websites = [];
-	var regexVariable = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi;
-	var regexTest = new RegExp(regexVariable); 
-	var j = 0;
-	for (var i = 0; i < foundSites.length; i++) {
-		if (regexTest.test(foundSites[i]) == false) {
-			websites[j] = foundSites[i];
-			j = j + 1;
-		}
-	}
-	
+  	var foundSites = bioLinks.match(/[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi);
+  	var websites = [];
+  	var regexVariable = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi;
+  	var regexTest = new RegExp(regexVariable);
+  	var j = 0;
+  	for (var i = 0; i < foundSites.length; i++) {
+    		if (regexTest.test(foundSites[i]) == false) {
+    			websites[j] = foundSites[i];
+    			j = j + 1;
+    		}
+  	}
+
     console.log("These are the websites that were extracted");
-	console.log(websites);
+	  console.log(websites);
     //console.log(bioLinks.match(/[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi));
-	
+
   }
 
   extractWebsite(bioLinks);
