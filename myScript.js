@@ -1,9 +1,12 @@
+//TODO: Clean up comments and write real documentation on how this was executed at a later time -Erica
+
 chrome.runtime.sendMessage({ifInstagram : true}, function(response) {
     if(window.location.href.indexOf("instagram.com") > -1) {
         var exp = "instagram\.com\/([\.a-z0-9_-]+?)\/$";
         var regex = new RegExp(exp); //instagram.com/[user]/
         if (regex.test(window.location.href)){
             // alert("regex works, can put logic for recognizing an instagram user here");
+          
             // calling mediaJSON function to console.log JSON element
             console.log("This is the JSON object from /media/");
             console.log(mediaJSON());
@@ -11,7 +14,6 @@ chrome.runtime.sendMessage({ifInstagram : true}, function(response) {
             console.log(userJSON());
         }
         // alert("you are on an instagram page when you refresh the page");
-
     }
 });
 
