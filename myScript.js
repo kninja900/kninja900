@@ -72,15 +72,29 @@ chrome.runtime.sendMessage({ifInstagram : true}, function(response) {
 
 // Scraping URLs bioLinks
   // Need to replace this with the bio from the api
-  var bioLinks = "I'm going to test this out to see if youtube.com/RobLipsett " +
+  var bioLinks = "I'm going to test this out to see if jneedle@bostonfinancial.com " +
   "and https://stackoverflow.com/questions/27916055/whats-the-meaning-of-gi-in-a-regex return as clickable links"
 
   function extractWebsite (bioLinks)
   {
     // Need to change console.log to return so that function can be called
     // and value returned from elsewhere in the code
+	var foundSites = bioLinks.match(/[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi);
+	var websites = [];
+	var regexVariable = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi;
+	var regexTest = new RegExp(regexVariable); 
+	var j = 0;
+	for (var i = 0; i < foundSites.length; i++) {
+		if (regexTest.test(foundSites[i]) == false) {
+			websites[j] = foundSites[i];
+			j = j + 1;
+		}
+	}
+	
     console.log("These are the websites that were extracted");
-    console.log(bioLinks.match(/[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi));
+	console.log(websites);
+    //console.log(bioLinks.match(/[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi));
+	
   }
 
   extractWebsite(bioLinks);
