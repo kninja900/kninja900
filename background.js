@@ -1,9 +1,5 @@
 chrome.runtime.onMessage.addListener(function(response, sender, sendResponse) {
-    // alert('The extension loaded. Update.'); TODO
-    // alert(response.toString());
     console.log(getAccessToken());
-    // getAccessToken().click();
-
 });
 
 

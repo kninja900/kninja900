@@ -8,22 +8,26 @@
 
   "browser_action": {
     "default_popup": "popup.html",
-	"default_title": "Mavrck IG-Tool",
-	"default_icon": "popup.png"
+  	"default_title": "Mavrck IG-Tool",
+  	"default_icon": "popup.png"
   },
-    "background": {
+
+  "background": {
     "scripts": ["background.js"]
   },
+
   "permissions": [
 	"notifications",
     "activeTab",
     "storage",
-    "identity"
+    "identity",
+     "tabs"
   ],
+
    "content_scripts": [
     {
       "matches": ["https://www.instagram.com/*"],
-      "js": ["myScript.js", "jquery-3.2.1.min.js"]
+      "js": ["jquery-3.2.1.min.js", "myScript.js"]
     }
   ]
 }
