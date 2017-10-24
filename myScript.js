@@ -63,7 +63,7 @@ chrome.runtime.sendMessage({ifInstagram : true}, function(response) {
 
 // Scraping URLs bioLinks
   // Need to replace this with the bio from the api
-  var bioLinks = "I'm going to test this out to see if jneedle@bostonfinancial.com " +
+  var bioLinks = "I'm going to apple.com test google.com mjsevey@gmail.com this out to see if jneedle@bostonfinancial.com " +
   "and https://stackoverflow.com/questions/27916055/whats-the-meaning-of-gi-in-a-regex return as clickable links"
 
   function extractWebsite (bioLinks)
