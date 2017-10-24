@@ -9,6 +9,10 @@ chrome.runtime.sendMessage({ifInstagram : true}, function(response) {
             console.log(mediaJSON());
             console.log("This is the JSON object from /?__a=1");
             console.log(userJSON());
+            console.log("This is the JSON2 object from /?__a=1");
+            console.log(userJSON2());
+            console.log("This is the JSON3 object from /?__a=1");
+            console.log(userJSON3());
         }
         // alert("you are on an instagram page when you refresh the page");
 
@@ -41,7 +45,29 @@ chrome.runtime.sendMessage({ifInstagram : true}, function(response) {
         json = data
       }
     });
-    return json;
+   return json;
+  }
+
+  function userJSON2() {
+    var json2 = [];
+    // Using .ajax so that async can be set to false allowing for returning the json element from the function
+	$.getJSON( window.location.href + "?__a=1", function( data ) {
+		$.each( data["user"], function ( key, val ) {
+			json2.push( "Key: " + key + " - val " + val );
+		});
+	});
+	return json2;
+  }
+  
+  function userJSON3() {
+    var json3 = [];
+    // Using .ajax so that async can be set to false allowing for returning the json element from the function
+	$.getJSON( window.location.href + "?__a=1", function( data ) {
+		$.each( data["user"]["followed_by"], function ( key, val) {
+			json3.push ( val );
+		});
+	});
+	return json3;
   }
 
 // Scraping Email from Bio
@@ -96,5 +122,5 @@ chrome.runtime.sendMessage({ifInstagram : true}, function(response) {
     //console.log(bioLinks.match(/[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi));
 	
   }
-
+  
   extractWebsite(bioLinks);
