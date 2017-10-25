@@ -72,7 +72,7 @@ chrome.runtime.sendMessage({ifInstagram : true}, function(response) {
     // and value returned from elsewhere in the code
   	var foundSites = bioLinks.match(/[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi);
   	var websites = [];
-  	var regexVariable = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi;
+  	var regexVariable = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/i;
   	var regexTest = new RegExp(regexVariable);
   	var j = 0;
   	for (var i = 0; i < foundSites.length; i++) {
