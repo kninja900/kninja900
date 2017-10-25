@@ -2,11 +2,7 @@
 
 // checks if the user ison instagram.com
   if(window.location.href.indexOf("instagram.com") > -1) {
-      var exp = "instagram\.com\/([\.a-z0-9_-]+?)\/$";
-      var regex = new RegExp(exp); //instagram.com/[user]/
-      if (regex.test(window.location.href)){
-          // alert("regex works, can put logic for recognizing an instagram user here");
-
+      if (onUserPage()){
           // calling mediaJSON function to console.log JSON element
           console.log("This is the JSON object from /media/");
           console.log(mediaJSON());
@@ -19,7 +15,20 @@
       // alert("you are on an instagram page when you refresh the page");
   }
 
+// This code will execute when elements are modified under the body element
+  $("body").bind("click", function() {
+      alert("Update");
+  });
 
+// function for identifying if on user page
+  function onUserPage() {
+    var exp = "instagram\.com\/([\.a-z0-9_-]+?)\/$";
+    var regex = new RegExp(exp); //instagram.com/[user]/
+    if (regex.test(window.location.href)){
+        // alert("regex works, can put logic for recognizing an instagram user here");
+        return true;
+    }
+  }
 
 // Pulling getJSON for /media out so it can be reused
   function mediaJSON() {
