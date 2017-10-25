@@ -1,24 +1,33 @@
 //TODO: Clean up comments and write real documentation on how this was executed at a later time -Erica
 
-// checks if the user ison instagram.com
-  if(window.location.href.indexOf("instagram.com") > -1) {
-      if (onUserPage()){
-          // calling mediaJSON function to console.log JSON element
-          console.log("This is the JSON object from /media/");
-          console.log(mediaJSON());
-          console.log("This is the JSON object from /?__a=1");
-          console.log(userJSON());
-          // var user = userJSON();
-          // bio can be accessed from user.user.biography
-          // websites can be accessed from user.user.external_url
-      }
-      // alert("you are on an instagram page when you refresh the page");
+// send JSON
+  function sendJSON() {
+    if (onUserPage() && onInstagram()){
+      // calling mediaJSON function to console.log JSON element
+      console.log("This is the JSON object from /media/");
+      console.log(mediaJSON());
+      console.log("This is the JSON object from /?__a=1");
+      console.log(userJSON());
+      // var user = userJSON();
+      // bio can be accessed from user.user.biography
+      // websites can be accessed from user.user.external_url
+    }
   }
+
+  sendJSON();
 
 // This code will execute when elements are modified under the body element
   $("body").bind("click", function() {
-      alert("Update");
+      sendJSON();
   });
+
+// checks if the user ison instagram.com
+  function onInstagram() {
+    if(window.location.href.indexOf("instagram.com") > -1) {
+      // alert("you are on an instagram page when you refresh the page");
+      return true;
+    }
+  }
 
 // function for identifying if on user page
   function onUserPage() {
