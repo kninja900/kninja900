@@ -1,21 +1,25 @@
 //TODO: Clean up comments and write real documentation on how this was executed at a later time -Erica
 
-chrome.runtime.sendMessage({ifInstagram : true}, function(response) {
-    if(window.location.href.indexOf("instagram.com") > -1) {
-        var exp = "instagram\.com\/([\.a-z0-9_-]+?)\/$";
-        var regex = new RegExp(exp); //instagram.com/[user]/
-        if (regex.test(window.location.href)){
-            // alert("regex works, can put logic for recognizing an instagram user here");
+// checks if the user ison instagram.com
+  if(window.location.href.indexOf("instagram.com") > -1) {
+      var exp = "instagram\.com\/([\.a-z0-9_-]+?)\/$";
+      var regex = new RegExp(exp); //instagram.com/[user]/
+      if (regex.test(window.location.href)){
+          // alert("regex works, can put logic for recognizing an instagram user here");
 
-            // calling mediaJSON function to console.log JSON element
-            console.log("This is the JSON object from /media/");
-            console.log(mediaJSON());
-            console.log("This is the JSON object from /?__a=1");
-            console.log(userJSON());
-        }
-        // alert("you are on an instagram page when you refresh the page");
-    }
-});
+          // calling mediaJSON function to console.log JSON element
+          console.log("This is the JSON object from /media/");
+          console.log(mediaJSON());
+          console.log("This is the JSON object from /?__a=1");
+          console.log(userJSON());
+          // var user = userJSON();
+          // bio can be accessed from user.user.biography
+          // websites can be accessed from user.user.external_url
+      }
+      // alert("you are on an instagram page when you refresh the page");
+  }
+
+
 
 // Pulling getJSON for /media out so it can be reused
   function mediaJSON() {
