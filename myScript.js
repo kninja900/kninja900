@@ -8,7 +8,26 @@
       console.log(mediaJSON());
       console.log("This is the JSON object from /?__a=1");
       console.log(userJSON());
-      // var user = userJSON();
+      var user = userJSON();
+      var email = extractEmails(user.user.biography);
+      if (email) {
+        console.log("Email from bio: "+email);
+      } else {
+        console.log("no email found in bio");
+      }
+      if (user.user.external_url) {
+        console.log("This is the website in the external_url");
+        console.log(user.user.external_url);
+        // dispaly or check bio for website and compare to email
+      } else {
+        var website = extractWebsite(user.user.biography);
+        if (website) {
+          console.log("This is the website in the bio");
+          console.log(website);
+        } else {
+          console.log("No Website");
+        }
+      }
       // bio can be accessed from user.user.biography
       // websites can be accessed from user.user.external_url
     }
@@ -17,6 +36,7 @@
   sendJSON();
 
 // This code will execute when elements are modified under the body element
+// update to title and DOMelement subtree
   $("body").bind("click", function() {
       sendJSON();
   });
@@ -69,34 +89,28 @@
   }
 
 // Scraping Email from Bio
-  // Need to replace static text with Bio from instagram API
-  var bio = "this is a test mjsevey@gmail.com for the funcion, but what about second@email.com";
+  // var bio = "this is a test mjsevey@gmail.com for the funcion, but what about second@email.com";
 
   function extractEmails (bio)
   {
-      // Need to change console.log to return so that function can be called
-      // and value returned from elsewhere in the code
-      console.log("These are the emails that were extracted");
-      console.log(bio.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi));
+      return bio.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi);
   }
 
   // Call extractEmails Function
-  extractEmails(bio);
+  // extractEmails(bio);
 
 // Scraping URLs bioLinks
-  // Need to replace this with the bio from the api
-  var bioLinks = "I'm going to apple.com test google.com mjsevey@gmail.com this out to see if jneedle@bostonfinancial.com " +
-  "and https://stackoverflow.com/questions/27916055/whats-the-meaning-of-gi-in-a-regex return as clickable links"
+  // var bioLinks = "I'm going to apple.com test google.com mjsevey@gmail.com this out to see if jneedle@bostonfinancial.com " +
+  // "and https://stackoverflow.com/questions/27916055/whats-the-meaning-of-gi-in-a-regex return as clickable links"
 
   function extractWebsite (bioLinks)
   {
-    // Need to change console.log to return so that function can be called
-    // and value returned from elsewhere in the code
   	var foundSites = bioLinks.match(/[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi);
   	var websites = [];
   	var regexVariable = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/i;
   	var regexTest = new RegExp(regexVariable);
   	var j = 0;
+    // errors if of length 0
   	for (var i = 0; i < foundSites.length; i++) {
     		if (regexTest.test(foundSites[i]) == false) {
     			websites[j] = foundSites[i];
@@ -104,10 +118,7 @@
     		}
   	}
 
-    console.log("These are the websites that were extracted");
-	  console.log(websites);
-    //console.log(bioLinks.match(/[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi));
-
+	  return websites;
   }
 
-  extractWebsite(bioLinks);
+  // extractWebsite(bioLinks);
