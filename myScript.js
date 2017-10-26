@@ -106,19 +106,22 @@
   function extractWebsite (bioLinks)
   {
   	var foundSites = bioLinks.match(/[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi);
-  	var websites = [];
-  	var regexVariable = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/i;
-  	var regexTest = new RegExp(regexVariable);
-  	var j = 0;
-    // errors if of length 0
-  	for (var i = 0; i < foundSites.length; i++) {
-    		if (regexTest.test(foundSites[i]) == false) {
-    			websites[j] = foundSites[i];
-    			j = j + 1;
-    		}
-  	}
+    if (foundSites) {
+      var websites = [];
+      var regexVariable = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/i;
+      var regexTest = new RegExp(regexVariable);
+      var j = 0;
+      for (var i = 0; i < foundSites.length; i++) {
+        if (regexTest.test(foundSites[i]) == false) {
+          websites[j] = foundSites[i];
+          j = j + 1;
+        }
+      }
 
-	  return websites;
+      return websites;
+    } else {
+      return false;
+    }
   }
 
   // extractWebsite(bioLinks);
