@@ -3,12 +3,19 @@
 // send JSON
   function sendJSON() {
     if (onUserPage() && onInstagram()){
-      // calling mediaJSON function to console.log JSON element
-      console.log("This is the JSON object from /media/");
-      console.log(mediaJSON());
-      console.log("This is the JSON object from /?__a=1");
-      console.log(userJSON());
       var user = userJSON();
+      if (mediaJSON()) {
+        console.log("This is the JSON object from /media/");
+        console.log(mediaJSON());
+      } else {
+        console.log("There is no JSON object for /media");
+      }
+      if (user) {
+        console.log("This is the JSON object from /?__a=1");
+        console.log(user);
+      } else {
+        console.log("There is no json at /?__a=1");
+      }
       var email = extractEmails(user.user.biography);
       if (email) {
         console.log("Email from bio: "+email);
@@ -28,8 +35,6 @@
           console.log("No Website");
         }
       }
-      // bio can be accessed from user.user.biography
-      // websites can be accessed from user.user.external_url
     }
   }
 
@@ -50,6 +55,7 @@
   }
 
 // function for identifying if on user page
+// how is this actually working?  can we make it more specific for user only?
   function onUserPage() {
     var exp = "instagram\.com\/([\.a-z0-9_-]+?)\/$";
     var regex = new RegExp(exp); //instagram.com/[user]/
@@ -89,19 +95,10 @@
   }
 
 // Scraping Email from Bio
-  // var bio = "this is a test mjsevey@gmail.com for the funcion, but what about second@email.com";
-
   function extractEmails (bio)
   {
       return bio.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi);
   }
-
-  // Call extractEmails Function
-  // extractEmails(bio);
-
-// Scraping URLs bioLinks
-  // var bioLinks = "I'm going to apple.com test google.com mjsevey@gmail.com this out to see if jneedle@bostonfinancial.com " +
-  // "and https://stackoverflow.com/questions/27916055/whats-the-meaning-of-gi-in-a-regex return as clickable links"
 
   function extractWebsite (bioLinks)
   {
@@ -123,5 +120,3 @@
       return false;
     }
   }
-
-  // extractWebsite(bioLinks);
