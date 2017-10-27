@@ -38,14 +38,6 @@
     }
   }
 
-  sendJSON();
-
-// This code will execute when elements are modified under the body element
-// update to title and DOMelement subtree
-  $("body").bind("click", function() {
-      sendJSON();
-  });
-
 // checks if the user ison instagram.com
   function onInstagram() {
     if(window.location.href.indexOf("instagram.com") > -1) {
@@ -120,3 +112,11 @@
       return false;
     }
   }
+
+  sendJSON();
+
+  // This code will execute when elements are modified under the body element
+  // update to title and DOMelement subtree
+  $("body").bind("click", function() {
+    sendJSON();
+  });
