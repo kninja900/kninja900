@@ -12,6 +12,10 @@
     "influencerType" : "",
     "sponsorPosts" : "",
     "egagement" : {
+      "likesPerPost": "",
+      "commentsPerPost": "",
+      "engPerPost": "",
+      "postEngRate": "",
       "followers" : "",
       "likeCommentRatio" : "",
       "perPost" : "",
@@ -19,10 +23,55 @@
     }
   };
 
+// userJson.user.media.nodes every image
+//userJson.user.media.nodes.length is the size of the array
+// userJson.user.media.nodes[i] object
+//userJson.user.media.nodes[0].comments.count comment count
+//userJson.user.media.nodes[0].likes.count like count
+  function commentLikeRatio(userJson) {
+    var sumRatios = 0;
+    var nodes = userJson.user.media.nodes.length;
+    for (i = 0; i < nodes; i++) {
+      console.log(userJson.user.media.nodes[i].likes.count + "/" +
+          userJson.user.media.nodes[i].comments.count+ "\n");
+      sumRatios += userJson.user.media.nodes[i].likes.count / userJson.user.media.nodes[i].comments.count;
+    }
+    var avg = sumRatios/nodes;
+      return avg;
+  }
+
+  function sponsorMetrics(mediaJson){
+    var sponsorPostCount = 0;
+    var items = mediaJson.items.length;
+    for (i = 0; i < items; i++) {
+      currentPostText = mediaJson.items[i].caption.text
+      console.log(currentPostText);
+      if (RegExp("#sponsor").test(currentPostText)) {
+        console.log("Count #sponsor");
+        sponsorPostCount++;
+      }
+      else if (RegExp("#ad").test(currentPostText)) {
+          console.log("Count #ad");
+          sponsorPostCount++;
+      }
+      else if (RegExp("#advertisement").test(currentPostText)) {
+          console.log("Count #advertisement");
+          sponsorPostCount++;
+      }
+      else if (RegExp("#promotion").test(currentPostText)) {
+          console.log("Count #promotion");
+          sponsorPostCount++;
+      }
+
+    }
+    console.log("Sponsored post count: " + sponsorPostCount);
+    return sponsorPostCount;
+  }
 // Builds JSON object to display data
   function buildJSON() {
     if (onUserPage() && onInstagram()){
-      var user = userJSON();
+      var userJson = userJSON();
+      var mediaJson = mediaJSON();
       if (mediaJSON()) {
         // analyze media here
       } else {
@@ -37,6 +86,7 @@
         } else {
           // console.log("no email found in bio");
         }
+
 
         jsonData.id = user.user.id;
         jsonData.username = user.user.name;
@@ -77,7 +127,10 @@
       }
 
       // Current data from user.  this is where we would update the popup.html
+      console.log("You average " + commentLikeRatio(userJson) + " likes per comment.");
+      console.log(sponsorMetrics(mediaJson));
       console.log(jsonData);
+      sendJSON(jsonData);
     }
 
   }
@@ -135,6 +188,38 @@
     return json;
   }
 
+
+  // Likes per Post = (Sum Likes Comments) / Post Count (last 20 posts or 90 days, whichever is shorter)
+  function likesPerPost(posts){
+    var total=0;
+    for (var i = 0; i < posts.length; i++) {
+      total += posts[i].likes.count;
+    }
+    return total/posts.length;
+  }
+  //Comments per post =   (Sum Post Comments) / Post Count
+  function commentsPerPost(posts){
+    var total=0;
+    for (var i = 0; i < posts.length; i++) {
+      total += posts[i].comments.count;
+    }
+    return total/posts.length;
+  }
+//Engagement per post (likes + comments / last 20 posts)
+  function engPerPost(posts){
+    var total=0;
+    for (var i = 0; i < posts.length; i++) {
+      total += posts[i].comments.count + posts[i].likes.count;
+    }
+    return total/posts.length;
+  }
+
+//Engagement rate: (Post Likes + Post Comments) / Follower Count
+function postEngRate(engagement,followers){
+return (engagement/followers)*100;
+
+}
+
 // Scraping Email from Bio
   function extractEmails (bio)
   {
@@ -184,5 +269,4 @@
   // update to title and DOMelement subtree
   $("body").bind("click", function() {
     buildJSON();
-    updatePopup();
   });
