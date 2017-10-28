@@ -67,12 +67,14 @@
     console.log("Sponsored post count: " + sponsorPostCount);
     return sponsorPostCount;
   }
+
+
 // Builds JSON object to display data
   function buildJSON() {
     if (onUserPage() && onInstagram()){
-      var userJson = userJSON();
-      var mediaJson = mediaJSON();
-      if (mediaJSON) {
+      var user = userJSON();
+      var media = mediaJSON();
+      if (media) {
         // analyze media here
       } else {
         console.log("There is no JSON object for /media");
@@ -92,6 +94,11 @@
         jsonData.fullname = user.user.full_name;
         jsonData.followers = user.user.followed_by.count;
         jsonData.following = user.user.follows.count;
+        jsonData.engagement.likesPerPost = likesPerPost(media.items);
+        jsonData.engagement.commentsPerPost = commentsPerPost(media.items);
+        jsonData.engagement.engPerPost = engPerPost(media.items);
+        jsonData.engagement.postEngRate = postEngRate(jsonData.engagement.engPerPost, user.user.followed_by.count);
+
 
         // Determine influencerType
         switch (true) {
@@ -198,21 +205,23 @@
 
 
   // Likes per Post = (Sum Likes Comments) / Post Count (last 20 posts or 90 days, whichever is shorter)
-  function likesPerPost(posts){
-    var total=0;
-    for (var i = 0; i < posts.length; i++) {
-      total += posts[i].likes.count;
+    function likesPerPost(posts){
+      var total=0;
+      for (var i = 0; i < posts.length; i++) {
+        total += posts[i].likes.count;
+      }
+      return total/posts.length;
     }
-    return total/posts.length;
-  }
+
   //Comments per post =   (Sum Post Comments) / Post Count
-  function commentsPerPost(posts){
-    var total=0;
-    for (var i = 0; i < posts.length; i++) {
-      total += posts[i].comments.count;
+    function commentsPerPost(posts){
+      var total=0;
+      for (var i = 0; i < posts.length; i++) {
+        total += posts[i].comments.count;
+      }
+      return total/posts.length;
     }
-    return total/posts.length;
-  }
+
 //Engagement per post (likes + comments / last 20 posts)
   function engPerPost(posts){
     var total=0;
@@ -223,19 +232,16 @@
   }
 
 //Engagement rate: (Post Likes + Post Comments) / Follower Count
-function postEngRate(engagement,followers){
-return (engagement/followers)*100;
-
-}
+  function postEngRate(engagement,followers) {
+    return (engagement/followers)*100;
+  }
 
 // Scraping Email from Bio
-  function extractEmails (bio)
-  {
+  function extractEmails (bio){
       return bio.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi);
   }
 
-  function extractWebsite (bio)
-  {
+  function extractWebsite (bio){
   	var foundSites = bio.match(/[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi);
     if (foundSites) {
       var websites = [];
