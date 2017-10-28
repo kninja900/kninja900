@@ -78,13 +78,22 @@
 
       // Current data from user.  this is where we would update the popup.html
       console.log(jsonData);
+
+      // Trying to update the popup html file
+      updatePopup();  //getting errors
     }
 
   }
 
 // Updating the popup.html
+// currently getting errors, getElementById is returning null
   function updatePopup() {
-    getElementById('iType').innerHTML = jsonData.influencerType;
+    var el = document.getElementById('engRate');
+    if (el) {
+      alert("found");
+    } else {
+      alert("not found");
+    }
   }
 
 // checks if the user ison instagram.com
@@ -184,5 +193,4 @@
   // update to title and DOMelement subtree
   $("body").bind("click", function() {
     buildJSON();
-    updatePopup();
   });
