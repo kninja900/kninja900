@@ -1,6 +1,5 @@
 //TODO: Clean up comments and write real documentation on how this was executed at a later time -Erica
 
-
 // Initalizing JSON object, setting up specific data to send to mavrck
   var jsonData = {
     "id" : "",
@@ -20,40 +19,57 @@
     }
   };
 
+// userJson.user.media.nodes every image
+//userJson.user.media.nodes.length is the size of the array
+// userJson.user.media.nodes[i] object
+//userJson.user.media.nodes[0].comments.count comment count
+//userJson.user.media.nodes[0].likes.count like count
+  function commentLikeRatio(userJson) {
+    var sumRatios = 0;
+    var nodes = userJson.user.media.nodes.length;
+    for (i = 0; i < nodes; i++) {
+      console.log(userJson.user.media.nodes[i].likes.count + "/" +
+          userJson.user.media.nodes[i].comments.count+ "\n");
+      sumRatios += userJson.user.media.nodes[i].likes.count / userJson.user.media.nodes[i].comments.count;
+    }
+    var avg = sumRatios/nodes;
+      return avg;
+  }
 // Builds JSON object to display data
   function buildJSON() {
     if (onUserPage() && onInstagram()){
-      var user = userJSON();
+      var userJson = userJSON();
+      var mediaJson = mediaJSON();
       if (mediaJSON()) {
         // analyze media here
       } else {
         console.log("There is no JSON object for /media");
       }
 
-      if (user) {
+      if (userJson) {
         // analyze user here and update jsonData
-        var email = extractEmails(user.user.biography);
+        var email = extractEmails(userJson.user.biography);
         if (email) {
           jsonData.email = email;
         } else {
           // console.log("no email found in bio");
         }
 
-        jsonData.id = user.user.id;
-        jsonData.username = user.user.name;
-        jsonData.fullname = user.user.full_name;
-        jsonData.followers = user.user.followed_by.count;
-        jsonData.following = user.user.follows.count;
+        jsonData.id = userJson.user.id;
+        jsonData.username = userJson.user.name;
+        jsonData.fullname = userJson.user.full_name;
+        jsonData.followers = userJson.user.followed_by.count;
+        jsonData.following = userJson.user.follows.count;
 
-        if (user.user.external_url) {
-          jsonData.website = user.user.external_url;
+        if (userJson.user.external_url) {
+          jsonData.website = userJson.user.external_url;
         } else {
           // checking bio for url
-          var website = extractWebsite(user.user.biography);
+          var website = extractWebsite(userJson.user.biography);
           if (website) {
             jsonData.website = website;
           } else {
-            // console.log("No Website");
+            console.log("No Website");
           }
         }
 
@@ -62,6 +78,7 @@
       }
 
       // Current data from user.  this is where we would update the popup.html
+      console.log("You average " + commentLikeRatio(userJson) + " likes per comment.");
       console.log(jsonData);
       sendJSON(jsonData);
     }
@@ -159,7 +176,6 @@
   }
 
   buildJSON();
-
   // This code will execute when elements are modified under the body element
   // update to title and DOMelement subtree
   $("body").bind("click", function() {
