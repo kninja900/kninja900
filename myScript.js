@@ -15,44 +15,42 @@
     }
   };
 
-  console.log(jsonData);
-
-// send JSON
-  function sendJSON() {
+// Builds JSON object to display data
+  function buildJSON() {
     if (onUserPage() && onInstagram()){
       var user = userJSON();
       if (mediaJSON()) {
-        console.log("This is the JSON object from /media/");
-        console.log(mediaJSON());
+        // analyze media here
       } else {
         console.log("There is no JSON object for /media");
       }
       if (user) {
-        console.log("This is the JSON object from /?__a=1");
-        console.log(user);
+        // analyze user here
+        var email = extractEmails(user.user.biography);
+        if (email) {
+          jsonData.email = email;
+        } else {
+          // console.log("no email found in bio");
+        }
+        if (user.user.external_url) {
+          jsonData.website = user.user.external_url;
+        } else {
+          // checking bio for url
+          var website = extractWebsite(user.user.biography);
+          if (website) {
+            jsonData.website = website;
+          } else {
+            // console.log("No Website");
+          }
+        }
       } else {
         console.log("There is no json at /?__a=1");
       }
-      var email = extractEmails(user.user.biography);
-      if (email) {
-        console.log("Email from bio: "+email);
-      } else {
-        console.log("no email found in bio");
-      }
-      if (user.user.external_url) {
-        console.log("This is the website in the external_url");
-        console.log(user.user.external_url);
-        // dispaly or check bio for website and compare to email
-      } else {
-        var website = extractWebsite(user.user.biography);
-        if (website) {
-          console.log("This is the website in the bio");
-          console.log(website);
-        } else {
-          console.log("No Website");
-        }
-      }
+
+      // Current data from user
+      console.log(jsonData);
     }
+
   }
 
 // checks if the user ison instagram.com
@@ -109,9 +107,9 @@
       return bio.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi);
   }
 
-  function extractWebsite (bioLinks)
+  function extractWebsite (bio)
   {
-  	var foundSites = bioLinks.match(/[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi);
+  	var foundSites = bio.match(/[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi);
     if (foundSites) {
       var websites = [];
       var regexVariable = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/i;
@@ -130,10 +128,10 @@
     }
   }
 
-  sendJSON();
+  buildJSON();
 
   // This code will execute when elements are modified under the body element
   // update to title and DOMelement subtree
   $("body").bind("click", function() {
-    sendJSON();
+    buildJSON();
   });
