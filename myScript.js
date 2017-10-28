@@ -35,6 +35,34 @@
     var avg = sumRatios/nodes;
       return avg;
   }
+
+  function sponsorMetrics(mediaJson){
+    var sponsorPostCount = 0;
+    var items = mediaJson.items.length;
+    for (i = 0; i < items; i++) {
+      currentPostText = mediaJson.items[i].caption.text
+      console.log(currentPostText);
+      if (RegExp("#sponsor").test(currentPostText)) {
+        console.log("Count #sponsor");
+        sponsorPostCount++;
+      }
+      else if (RegExp("#ad").test(currentPostText)) {
+          console.log("Count #ad");
+          sponsorPostCount++;
+      }
+      else if (RegExp("#advertisement").test(currentPostText)) {
+          console.log("Count #advertisement");
+          sponsorPostCount++;
+      }
+      else if (RegExp("#promotion").test(currentPostText)) {
+          console.log("Count #promotion");
+          sponsorPostCount++;
+      }
+
+    }
+    console.log("Sponsored post count: " + sponsorPostCount);
+    return sponsorPostCount;
+  }
 // Builds JSON object to display data
   function buildJSON() {
     if (onUserPage() && onInstagram()){
@@ -79,6 +107,7 @@
 
       // Current data from user.  this is where we would update the popup.html
       console.log("You average " + commentLikeRatio(userJson) + " likes per comment.");
+      console.log(sponsorMetrics(mediaJson));
       console.log(jsonData);
       sendJSON(jsonData);
     }
@@ -179,5 +208,5 @@
   // This code will execute when elements are modified under the body element
   // update to title and DOMelement subtree
   $("body").bind("click", function() {
-    buildJSON();
+    // buildJSON();
   });
