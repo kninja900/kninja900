@@ -11,7 +11,7 @@
     "following" : "",
     "influencerType" : "",
     "sponsorPosts" : "",
-    "egagement" : {
+    "engagement" : {
       "likesPerPost": "",
       "commentsPerPost": "",
       "engPerPost": "",
