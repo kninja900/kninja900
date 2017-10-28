@@ -12,6 +12,10 @@
     "influencerType" : "",
     "sponsorPosts" : "",
     "egagement" : {
+      "likesPerPost": "",
+      "commentsPerPost": "",
+      "engPerPost": "",
+      "postEngRate": "",
       "followers" : "",
       "likeCommentRatio" : "",
       "perPost" : "",
@@ -74,30 +78,35 @@
         console.log("There is no JSON object for /media");
       }
 
-      if (userJson) {
+      if (user) {
         // analyze user here and update jsonData
-        var email = extractEmails(userJson.user.biography);
+        var email = extractEmails(user.user.biography);
         if (email) {
           jsonData.email = email;
         } else {
           // console.log("no email found in bio");
         }
 
-        jsonData.id = userJson.user.id;
-        jsonData.username = userJson.user.name;
-        jsonData.fullname = userJson.user.full_name;
-        jsonData.followers = userJson.user.followed_by.count;
-        jsonData.following = userJson.user.follows.count;
 
-        if (userJson.user.external_url) {
-          jsonData.website = userJson.user.external_url;
+        jsonData.id = user.user.id;
+        jsonData.username = user.user.name;
+        jsonData.fullname = user.user.full_name;
+        jsonData.followers = user.user.followed_by.count;
+        jsonData.following = user.user.follows.count;
+        jsonData.engagement.likesPerPost = likesPerPost(media.items);
+        jsonData.engagement.commentsPerPost = commentsPerPost(media.items);
+        jsonData.engagement.engPerPost = engPerPost(media.items);
+        jsonData.engagement.postEngRate = postEngRate(jsonData.engagement.engPerPost, user.user.followed_by.count);
+
+        if (user.user.external_url) {
+          jsonData.website = user.user.external_url;
         } else {
           // checking bio for url
-          var website = extractWebsite(userJson.user.biography);
+          var website = extractWebsite(user.user.biography);
           if (website) {
             jsonData.website = website;
           } else {
-            console.log("No Website");
+            // console.log("No Website");
           }
         }
 
@@ -161,6 +170,38 @@
     });
     return json;
   }
+
+
+  // Likes per Post = (Sum Likes Comments) / Post Count (last 20 posts or 90 days, whichever is shorter)
+  function likesPerPost(posts){
+    var total=0;
+    for (var i = 0; i < posts.length; i++) {
+      total += posts[i].likes.count;
+    }
+    return total/posts.length;
+  }
+  //Comments per post =   (Sum Post Comments) / Post Count
+  function commentsPerPost(posts){
+    var total=0;
+    for (var i = 0; i < posts.length; i++) {
+      total += posts[i].comments.count;
+    }
+    return total/posts.length;
+  }
+//Engagement per post (likes + comments / last 20 posts)
+  function engPerPost(posts){
+    var total=0;
+    for (var i = 0; i < posts.length; i++) {
+      total += posts[i].comments.count + posts[i].likes.count;
+    }
+    return total/posts.length;
+  }
+
+//Engagement rate: (Post Likes + Post Comments) / Follower Count
+function postEngRate(engagement,followers){
+return (engagement/followers)*100;
+
+}
 
 // Scraping Email from Bio
   function extractEmails (bio)
