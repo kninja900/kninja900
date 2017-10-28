@@ -74,13 +74,8 @@
     if (onUserPage() && onInstagram()){
       var user = userJSON();
       var media = mediaJSON();
-      if (media) {
-        // analyze media here
-      } else {
-        console.log("There is no JSON object for /media");
-      }
 
-      if (user) {
+      if (user && media) {
         // analyze user here and update jsonData
         var email = extractEmails(user.user.biography);
         if (email) {
@@ -130,6 +125,7 @@
 
       } else {
         console.log("There is no json at /?__a=1");
+        console.log("Or There is no JSON object for /media");
       }
 
       // Current data from user.  this is where we would update the popup.html
@@ -174,7 +170,7 @@
     }
   }
 
-// Pulling getJSON for /media out so it can be reused
+// Pulling JSON for /media
   function mediaJSON() {
     var json;
     // Using .ajax so that async can be set to false allowing for returning the json element from the function
@@ -189,6 +185,7 @@
     return json;
   }
 
+// Pulling JSON object from /?__a=1
   function userJSON() {
     var json;
     // Using .ajax so that async can be set to false allowing for returning the json element from the function
@@ -204,23 +201,23 @@
   }
 
 
-  // Likes per Post = (Sum Likes Comments) / Post Count (last 20 posts or 90 days, whichever is shorter)
-    function likesPerPost(posts){
-      var total=0;
-      for (var i = 0; i < posts.length; i++) {
-        total += posts[i].likes.count;
-      }
-      return total/posts.length;
+// Likes per Post = (Sum Likes Comments) / Post Count (last 20 posts or 90 days, whichever is shorter)
+  function likesPerPost(posts){
+    var total=0;
+    for (var i = 0; i < posts.length; i++) {
+      total += posts[i].likes.count;
     }
+    return total/posts.length;
+  }
 
-  //Comments per post =   (Sum Post Comments) / Post Count
-    function commentsPerPost(posts){
-      var total=0;
-      for (var i = 0; i < posts.length; i++) {
-        total += posts[i].comments.count;
-      }
-      return total/posts.length;
+//Comments per post =   (Sum Post Comments) / Post Count
+  function commentsPerPost(posts){
+    var total=0;
+    for (var i = 0; i < posts.length; i++) {
+      total += posts[i].comments.count;
     }
+    return total/posts.length;
+  }
 
 //Engagement per post (likes + comments / last 20 posts)
   function engPerPost(posts){
@@ -277,6 +274,7 @@
     });
   }
 
+// Calling buildJSON to run code on load
   buildJSON();
 
   // This code will execute when elements are modified under the body element
