@@ -72,7 +72,7 @@
     if (onUserPage() && onInstagram()){
       var userJson = userJSON();
       var mediaJson = mediaJSON();
-      if (mediaJSON()) {
+      if (mediaJSON) {
         // analyze media here
       } else {
         console.log("There is no JSON object for /media");
@@ -86,7 +86,6 @@
         } else {
           // console.log("no email found in bio");
         }
-
 
         jsonData.id = user.user.id;
         jsonData.username = user.user.name;
