@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
 
-  "name": "Alert",
-  "description": "Instgram Alert Message",
+  "name": "Kninja900Alert",
+  "description": "Instagram Alert Message",
   "version": "1.0",
 
   "browser_action": {
