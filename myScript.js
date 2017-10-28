@@ -1,5 +1,22 @@
 //TODO: Clean up comments and write real documentation on how this was executed at a later time -Erica
 
+// Initalizing JSON object, setting up specific data to send to mavrck
+  var jsonData = {
+    "fullname" : "",
+    "username" : "",
+    "email" : "",
+    "website" : "",
+    "sponsorPosts" : "",
+    "egagement" : {
+      "followers" : "",
+      "likeCommentRatio" : "",
+      "perPost" : "",
+      "Post" : ""
+    }
+  };
+
+  console.log(jsonData);
+
 // send JSON
   function sendJSON() {
     if (onUserPage() && onInstagram()){
