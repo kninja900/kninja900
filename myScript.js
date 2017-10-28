@@ -129,8 +129,8 @@
       }
 
       // Current data from user.  this is where we would update the popup.html
-      console.log("You average " + commentLikeRatio(userJson) + " likes per comment.");
-      console.log(sponsorMetrics(mediaJson));
+      console.log("You average " + commentLikeRatio(user) + " likes per comment.");
+      console.log(sponsorMetrics(media));
       console.log(jsonData);
       sendJSON(jsonData);
       // currenting generating an error because getElementById is returning null
