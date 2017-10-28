@@ -3,7 +3,7 @@
 
   "name": "Mavrck Instagram Extension",
   "description": "Pulls data from instagram profiles",
-  "version": "1.0",
+  "version": "2.0",
   "key": "kopnmhmejhkgjhkpiblenbemcednhako",
 
   "browser_action": {
@@ -17,10 +17,10 @@
   },
 
   "permissions": [
-	"notifications",
-    "activeTab",
-    "storage",
-    "identity",
+	   "notifications",
+     "activeTab",
+     "storage",
+     "identity",
      "tabs"
   ],
 
