@@ -62,9 +62,13 @@
 
       // Current data from user.  this is where we would update the popup.html
       console.log(jsonData);
-      sendJSON(jsonData);
     }
 
+  }
+
+// Updating the popup.html
+  function updatePopup() {
+    getElementById('iType').innerHTML = jsonData.influencerType;
   }
 
 // checks if the user ison instagram.com
@@ -145,8 +149,9 @@
 // sending JSON to endpoint - will be Mavrck API
   function sendJSON (json) {
     $.ajax({
-      url: window.location.href + "json",
-      data: 'json',
+      // url: , // Mavrck endpoint
+      data: json,
+      dataType: 'json',
       success: function(msg) {
         if (msg) {
           alert("sent");
@@ -163,4 +168,5 @@
   // update to title and DOMelement subtree
   $("body").bind("click", function() {
     buildJSON();
+    updatePopup();
   });
