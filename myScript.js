@@ -46,19 +46,19 @@
     for (i = 0; i < items; i++) {
       currentPostText = mediaJson.items[i].caption.text
       console.log(currentPostText);
-      if (RegExp("#sponsor").test(currentPostText)) {
+      if (RegExp("#sponsor ").test(currentPostText)) {
         console.log("Count #sponsor");
         sponsorPostCount++;
       }
-      else if (RegExp("#ad").test(currentPostText)) {
+      else if (RegExp("#ad ").test(currentPostText)) {
           console.log("Count #ad");
           sponsorPostCount++;
       }
-      else if (RegExp("#advertisement").test(currentPostText)) {
+      else if (RegExp("#advertisement ").test(currentPostText)) {
           console.log("Count #advertisement");
           sponsorPostCount++;
       }
-      else if (RegExp("#promotion").test(currentPostText)) {
+      else if (RegExp("#promotion ").test(currentPostText)) {
           console.log("Count #promotion");
           sponsorPostCount++;
       }
