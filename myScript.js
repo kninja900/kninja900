@@ -44,6 +44,22 @@
         jsonData.followers = user.user.followed_by.count;
         jsonData.following = user.user.follows.count;
 
+        // Determine influencerType
+        switch (true) {
+          case jsonData.followers > 1000000:
+            jsonData.influencerType = "Mega";
+            break;
+          case jsonData.followers > 50000:
+            jsonData.influencerType = "Macro";
+            break;
+          case jsonData.followers > 5000:
+            jsonData.influencerType = "Micro";
+            break;
+          default:
+            jsonData.influencerType = "Baby";
+            break;
+        }
+
         if (user.user.external_url) {
           jsonData.website = user.user.external_url;
         } else {
