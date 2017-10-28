@@ -2,10 +2,14 @@
 
 // Initalizing JSON object, setting up specific data to send to mavrck
   var jsonData = {
-    "fullname" : "",
+    "id" : "",
     "username" : "",
+    "fullname" : "",
     "email" : "",
     "website" : "",
+    "followers" : "",
+    "following" : "",
+    "influencerType" : "",
     "sponsorPosts" : "",
     "egagement" : {
       "followers" : "",
@@ -24,14 +28,22 @@
       } else {
         console.log("There is no JSON object for /media");
       }
+
       if (user) {
-        // analyze user here
+        // analyze user here and update jsonData
         var email = extractEmails(user.user.biography);
         if (email) {
           jsonData.email = email;
         } else {
           // console.log("no email found in bio");
         }
+
+        jsonData.id = user.user.id;
+        jsonData.username = user.user.name;
+        jsonData.fullname = user.user.full_name;
+        jsonData.followers = user.user.followed_by.count;
+        jsonData.following = user.user.follows.count;
+
         if (user.user.external_url) {
           jsonData.website = user.user.external_url;
         } else {
@@ -43,12 +55,14 @@
             // console.log("No Website");
           }
         }
+
       } else {
         console.log("There is no json at /?__a=1");
       }
 
-      // Current data from user
+      // Current data from user.  this is where we would update the popup.html
       console.log(jsonData);
+      sendJSON(jsonData);
     }
 
   }
@@ -126,6 +140,21 @@
     } else {
       return false;
     }
+  }
+
+// sending JSON to endpoint - will be Mavrck API
+  function sendJSON (json) {
+    $.ajax({
+      url: window.location.href + "json",
+      data: 'json',
+      success: function(msg) {
+        if (msg) {
+          alert("sent");
+        } else {
+          alert("error");
+        }
+      }
+    });
   }
 
   buildJSON();
