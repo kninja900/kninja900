@@ -11,7 +11,7 @@
     "following" : "",
     "influencerType" : "",
     "sponsorPosts" : "",
-    "egagement" : {
+    "engagement" : {
       "likesPerPost": "",
       "commentsPerPost": "",
       "engPerPost": "",
@@ -32,8 +32,8 @@
     var sumRatios = 0;
     var nodes = userJson.user.media.nodes.length;
     for (i = 0; i < nodes; i++) {
-      console.log(userJson.user.media.nodes[i].likes.count + "/" +
-          userJson.user.media.nodes[i].comments.count+ "\n");
+      // console.log(userJson.user.media.nodes[i].likes.count + "/" +
+      //     userJson.user.media.nodes[i].comments.count+ "\n");
       sumRatios += userJson.user.media.nodes[i].likes.count / userJson.user.media.nodes[i].comments.count;
     }
     var avg = sumRatios/nodes;
@@ -45,26 +45,26 @@
     var items = mediaJson.items.length;
     for (i = 0; i < items; i++) {
       currentPostText = mediaJson.items[i].caption.text
-      console.log(currentPostText);
+      // console.log(currentPostText);
       if (RegExp("#sponsor").test(currentPostText)) {
-        console.log("Count #sponsor");
+        // console.log("Count #sponsor");
         sponsorPostCount++;
       }
       else if (RegExp("#ad").test(currentPostText)) {
-          console.log("Count #ad");
+          // console.log("Count #ad");
           sponsorPostCount++;
       }
       else if (RegExp("#advertisement").test(currentPostText)) {
-          console.log("Count #advertisement");
+          // console.log("Count #advertisement");
           sponsorPostCount++;
       }
       else if (RegExp("#promotion").test(currentPostText)) {
-          console.log("Count #promotion");
+          // console.log("Count #promotion");
           sponsorPostCount++;
       }
 
     }
-    console.log("Sponsored post count: " + sponsorPostCount);
+    // console.log("Sponsored post count: " + sponsorPostCount);
     return sponsorPostCount;
   }
 
@@ -85,15 +85,16 @@
         }
 
         jsonData.id = user.user.id;
-        jsonData.username = user.user.name;
+        jsonData.username = user.user.username;
         jsonData.fullname = user.user.full_name;
         jsonData.followers = user.user.followed_by.count;
         jsonData.following = user.user.follows.count;
+        jsonData.sponsorPosts = sponsorMetrics(media);
         jsonData.engagement.likesPerPost = likesPerPost(media.items);
         jsonData.engagement.commentsPerPost = commentsPerPost(media.items);
         jsonData.engagement.engPerPost = engPerPost(media.items);
         jsonData.engagement.postEngRate = postEngRate(jsonData.engagement.engPerPost, user.user.followed_by.count);
-
+        jsonData.engagement.likeCommentRatio = commentLikeRatio(user);
 
         // Determine influencerType
         switch (true) {
@@ -129,10 +130,9 @@
       }
 
       // Current data from user.  this is where we would update the popup.html
-      console.log("You average " + commentLikeRatio(user) + " likes per comment.");
-      console.log(sponsorMetrics(media));
       console.log(jsonData);
       sendJSON(jsonData);
+
       // currenting generating an error because getElementById is returning null
       updatePopup();
 
@@ -144,11 +144,11 @@
 // currently getting errors, getElementById is returning null
   function updatePopup() {
     var el = document.getElementById('engRate');
-    if (el) {
-      alert("found");
-    } else {
-      alert("not found");
-    }
+    // if (el) {
+    //   alert("found");
+    // } else {
+    //   alert("not found");
+    // }
   }
 
 // checks if the user ison instagram.com
