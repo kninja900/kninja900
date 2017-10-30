@@ -140,17 +140,6 @@
 
   }
 
-// Updating the popup.html
-// currently getting errors, getElementById is returning null
-  function updatePopup() {
-    var el = document.getElementById('engRate');
-    // if (el) {
-    //   alert("found");
-    // } else {
-    //   alert("not found");
-    // }
-  }
-
 // checks if the user ison instagram.com
   function onInstagram() {
     if(window.location.href.indexOf("instagram.com") > -1) {
