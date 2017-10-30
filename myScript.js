@@ -43,25 +43,35 @@
   function sponsorMetrics(mediaJson){
     var sponsorPostCount = 0;
     var items = mediaJson.items.length;
+    var tags = ["#sponsor","#sponsored","#ad","#advertisement","#promotion"];
+
     for (i = 0; i < items; i++) {
       currentPostText = mediaJson.items[i].caption.text
-      // console.log(currentPostText);
-      if (RegExp("#sponsor").test(currentPostText)) {
-        // console.log("Count #sponsor");
-        sponsorPostCount++;
-      }
-      else if (RegExp("#ad").test(currentPostText)) {
-          // console.log("Count #ad");
+
+      // consider the same post having multiple hashtags
+
+      for (var i = 0; i < tags.length; i++) {
+        if (RegExp(tags[i]).test(currentPostText)) {
           sponsorPostCount++;
+          break; 
+        }
       }
-      else if (RegExp("#advertisement").test(currentPostText)) {
-          // console.log("Count #advertisement");
-          sponsorPostCount++;
-      }
-      else if (RegExp("#promotion").test(currentPostText)) {
-          // console.log("Count #promotion");
-          sponsorPostCount++;
-      }
+      // else if (RegExp("#sponsored").test(currentPostText)) {
+      //     // console.log("Count #ad");
+      //     sponsorPostCount++;
+      // }
+      // else if (RegExp("#ad").test(currentPostText)) {
+      //     // console.log("Count #ad");
+      //     sponsorPostCount++;
+      // }
+      // else if (RegExp("#advertisement").test(currentPostText)) {
+      //     // console.log("Count #advertisement");
+      //     sponsorPostCount++;
+      // }
+      // else if (RegExp("#promotion").test(currentPostText)) {
+      //     // console.log("Count #promotion");
+      //     sponsorPostCount++;
+      // }
 
     }
     // console.log("Sponsored post count: " + sponsorPostCount);
@@ -108,7 +118,7 @@
             jsonData.influencerType = "Micro";
             break;
           default:
-            jsonData.influencerType = "Baby";
+            jsonData.influencerType = "Nano";
             break;
         }
 
@@ -184,7 +194,6 @@
     });
     return json;
   }
-
 
 // Likes per Post = (Sum Likes Comments) / Post Count (last 20 posts or 90 days, whichever is shorter)
   function likesPerPost(posts){
@@ -272,3 +281,4 @@
       buildJSON();
       return jsonData
   }
+  // chrome.runtime.connect(extensionId, object{nameOfConnection, TlsChanId});
