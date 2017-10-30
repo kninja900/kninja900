@@ -12,10 +12,6 @@
   	"default_icon": "popup.png"
   },
 
-  "background": {
-    "scripts": ["background.js"]
-  },
-
   "permissions": [
 	   "notifications",
      "activeTab",
