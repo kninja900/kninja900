@@ -131,10 +131,6 @@
 
       // Current data from user.  this is where we would update the popup.html
       console.log(jsonData);
-      sendJSON(jsonData);
-
-      // currenting generating an error because getElementById is returning null
-      updatePopup();
 
     }
 
