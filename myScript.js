@@ -282,3 +282,8 @@
   $("body").bind("click", function() {
     buildJSON();
   });
+
+  function returnJSON () {
+      buildJSON();
+      return jsonData
+  }
