@@ -48,33 +48,15 @@
     for (i = 0; i < items; i++) {
       currentPostText = mediaJson.items[i].caption.text
 
-      // consider the same post having multiple hashtags
-
-      for (var i = 0; i < tags.length; i++) {
-        if (RegExp(tags[i]).test(currentPostText)) {
+      for (var j = 0; j < tags.length; j++) {
+        if (RegExp(tags[j]).test(currentPostText)) {
           sponsorPostCount++;
-          break; 
+          // break;
         }
       }
-      // else if (RegExp("#sponsored").test(currentPostText)) {
-      //     // console.log("Count #ad");
-      //     sponsorPostCount++;
-      // }
-      // else if (RegExp("#ad").test(currentPostText)) {
-      //     // console.log("Count #ad");
-      //     sponsorPostCount++;
-      // }
-      // else if (RegExp("#advertisement").test(currentPostText)) {
-      //     // console.log("Count #advertisement");
-      //     sponsorPostCount++;
-      // }
-      // else if (RegExp("#promotion").test(currentPostText)) {
-      //     // console.log("Count #promotion");
-      //     sponsorPostCount++;
-      // }
 
     }
-    // console.log("Sponsored post count: " + sponsorPostCount);
+
     return sponsorPostCount;
   }
 
