@@ -1,5 +1,8 @@
 //TODO: Clean up comments and write real documentation on how this was executed at a later time -Erica
 
+// Initializing the variable title content
+  var title;
+
 // Initalizing JSON object, setting up specific data to send to mavrck
   var jsonData = {
     "id" : "",
@@ -123,6 +126,9 @@
 
       // Current data from user.  this is where we would update the popup.html
       console.log(jsonData);
+
+      // Capturing the contents of the title tag
+      title = $("title").html();
 
     }
 
@@ -255,8 +261,12 @@
 
 // This code will execute when elements are modified under the body element
 // update to title and DOMelement subtree
-  $("body").bind("click", function() {
-    buildJSON();
+// instagram uses react, look for specific DOM tree element
+  $("._mesn5").bind("onload", function() {
+    // or just instagram
+    if (title != $('title').html()) {
+      buildJSON();
+    }
   });
 
 //working on communicating with popup.js
