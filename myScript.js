@@ -253,12 +253,13 @@
 // Calling buildJSON to run code on load
   buildJSON();
 
-  // This code will execute when elements are modified under the body element
-  // update to title and DOMelement subtree
+// This code will execute when elements are modified under the body element
+// update to title and DOMelement subtree
   $("body").bind("click", function() {
     buildJSON();
   });
 
+//working on communicating with popup.js
   function returnJSON () {
       buildJSON();
       return jsonData
