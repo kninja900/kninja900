@@ -1,5 +1,9 @@
 //TODO: Clean up comments and write real documentation on how this was executed at a later time -Erica
 
+// Initializing the variable title content and explore url
+  var title;
+  var explore = 'https://www.instagram.com/explore/';
+
 // Initalizing JSON object, setting up specific data to send to mavrck
   var jsonData = {
     "id" : "",
@@ -116,13 +120,16 @@
           }
         }
 
+        // Current data from user.  this is where we would update the popup.html
+        console.log(jsonData);
+
       } else {
         console.log("There is no json at /?__a=1");
         console.log("Or There is no JSON object for /media");
       }
 
-      // Current data from user.  this is where we would update the popup.html
-      console.log(jsonData);
+      // Capturing the contents of the title tag
+      title = $("title").html();
 
     }
 
@@ -141,7 +148,7 @@
   function onUserPage() {
     var exp = "instagram\.com\/([\.a-z0-9_-]+?)\/$";
     var regex = new RegExp(exp); //instagram.com/[user]/
-    if (regex.test(window.location.href)){
+    if (regex.test(window.location.href) && window.location.href != explore){
         // alert("regex works, can put logic for recognizing an instagram user here");
         return true;
     }
@@ -256,7 +263,19 @@
 // This code will execute when elements are modified under the body element
 // update to title and DOMelement subtree
   $("body").bind("click", function() {
-    buildJSON();
+    // or just instagram
+    if (title != $('title').html()) {
+      buildJSON();
+    }
+  });
+
+// trying to trigger off of article tag with class of ._mesn5 as that is specific to user page
+  // instagram uses react, look for specific DOM tree element
+  $("._mesn5").bind("onload", function() {
+    // or just instagram
+    if (title != $('title').html()) {
+      buildJSON();
+    }
   });
 
 //working on communicating with popup.js
