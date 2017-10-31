@@ -51,7 +51,7 @@
       for (var j = 0; j < tags.length; j++) {
         if (RegExp(tags[j]).test(currentPostText)) {
           sponsorPostCount++;
-          // break;
+          break;
         }
       }
 
