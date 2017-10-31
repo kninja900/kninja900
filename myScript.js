@@ -43,28 +43,20 @@
   function sponsorMetrics(mediaJson){
     var sponsorPostCount = 0;
     var items = mediaJson.items.length;
+    var tags = ["#sponsor","#sponsored","#ad","#advertisement","#promotion"];
+
     for (i = 0; i < items; i++) {
       currentPostText = mediaJson.items[i].caption.text
-      // console.log(currentPostText);
-      if (RegExp("#sponsor").test(currentPostText)) {
-        // console.log("Count #sponsor");
-        sponsorPostCount++;
-      }
-      else if (RegExp("#ad").test(currentPostText)) {
-          // console.log("Count #ad");
+
+      for (var j = 0; j < tags.length; j++) {
+        if (RegExp(tags[j]).test(currentPostText)) {
           sponsorPostCount++;
-      }
-      else if (RegExp("#advertisement").test(currentPostText)) {
-          // console.log("Count #advertisement");
-          sponsorPostCount++;
-      }
-      else if (RegExp("#promotion").test(currentPostText)) {
-          // console.log("Count #promotion");
-          sponsorPostCount++;
+          break;
+        }
       }
 
     }
-    // console.log("Sponsored post count: " + sponsorPostCount);
+
     return sponsorPostCount;
   }
 
@@ -108,7 +100,7 @@
             jsonData.influencerType = "Micro";
             break;
           default:
-            jsonData.influencerType = "Baby";
+            jsonData.influencerType = "Nano";
             break;
         }
 
@@ -131,24 +123,9 @@
 
       // Current data from user.  this is where we would update the popup.html
       console.log(jsonData);
-      sendJSON(jsonData);
-
-      // currenting generating an error because getElementById is returning null
-      updatePopup();
 
     }
 
-  }
-
-// Updating the popup.html
-// currently getting errors, getElementById is returning null
-  function updatePopup() {
-    var el = document.getElementById('engRate');
-    // if (el) {
-    //   alert("found");
-    // } else {
-    //   alert("not found");
-    // }
   }
 
 // checks if the user ison instagram.com
@@ -199,7 +176,6 @@
     });
     return json;
   }
-
 
 // Likes per Post = (Sum Likes Comments) / Post Count (last 20 posts or 90 days, whichever is shorter)
   function likesPerPost(posts){
@@ -277,8 +253,15 @@
 // Calling buildJSON to run code on load
   buildJSON();
 
-  // This code will execute when elements are modified under the body element
-  // update to title and DOMelement subtree
+// This code will execute when elements are modified under the body element
+// update to title and DOMelement subtree
   $("body").bind("click", function() {
     buildJSON();
   });
+
+//working on communicating with popup.js
+  function returnJSON () {
+      buildJSON();
+      return jsonData
+  }
+  // chrome.runtime.connect(extensionId, object{nameOfConnection, TlsChanId});
