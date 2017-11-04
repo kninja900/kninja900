@@ -73,11 +73,22 @@
 
       if (user && media) {
         // analyze user here and update jsonData
-        var email = extractEmails(user.user.biography);
-        if (email) {
-          jsonData.email = email;
+
+        if (user.user.biography) {
+          var email = extractEmails(user.user.biography);
+          var website = extractWebsite(user.user.biography);
+          if (email) {
+            jsonData.email = email;
+          }
+        }
+
+        if (user.user.external_url) {
+          jsonData.website = user.user.external_url;
         } else {
-          // console.log("no email found in bio");
+          // checking bio for url
+          if (website) {
+            jsonData.website = website;
+          }
         }
 
         jsonData.id = user.user.id;
@@ -108,24 +119,13 @@
             break;
         }
 
-        if (user.user.external_url) {
-          jsonData.website = user.user.external_url;
-        } else {
-          // checking bio for url
-          var website = extractWebsite(user.user.biography);
-          if (website) {
-            jsonData.website = website;
-          } else {
-            // console.log("No Website");
-          }
-        }
-
         // Current data from user.  this is where we would update the popup.html
         console.log(jsonData);
 
         // Sending data to popup.js
         chrome.runtime.sendMessage(jsonData, function(response) {
-          console.log(response.farewell);
+          // console.log(response.farewell);
+          return true;
         });
 
         // Capturing the contents of the title tag
@@ -282,3 +282,17 @@
       buildJSON();
     }
   });
+
+
+  // var port = chrome.runtime.connect({name: "knockknock"});
+  // port.postMessage({joke: "Knock knock"});
+  // port.onMessage.addListener(function(msg) {
+  //   if (msg.question == "Who's there?") {
+  //     console.log("msg.question");
+  //     port.postMessage({answer: "Madame"});
+  //   }
+  //   else if (msg.question == "Madame who?") {
+  //     console.log("msg.question");
+  //     port.postMessage({answer: "Madame... Bovary"});
+  //   }
+  // });
