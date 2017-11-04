@@ -27,44 +27,6 @@
     }
   };
 
-// userJson.user.media.nodes every image
-//userJson.user.media.nodes.length is the size of the array
-// userJson.user.media.nodes[i] object
-//userJson.user.media.nodes[0].comments.count comment count
-//userJson.user.media.nodes[0].likes.count like count
-  function commentLikeRatio(userJson) {
-    var sumRatios = 0;
-    var nodes = userJson.user.media.nodes.length;
-    for (i = 0; i < nodes; i++) {
-      // console.log(userJson.user.media.nodes[i].likes.count + "/" +
-      //     userJson.user.media.nodes[i].comments.count+ "\n");
-      sumRatios += userJson.user.media.nodes[i].likes.count / userJson.user.media.nodes[i].comments.count;
-    }
-    var avg = sumRatios/nodes;
-      return avg;
-  }
-
-  function sponsorMetrics(mediaJson){
-    var sponsorPostCount = 0;
-    var items = mediaJson.items.length;
-    var tags = ["#sponsor","#sponsored","#ad","#advertisement","#promotion"];
-
-    for (i = 0; i < items; i++) {
-      currentPostText = mediaJson.items[i].caption.text
-
-      for (var j = 0; j < tags.length; j++) {
-        if (RegExp(tags[j]).test(currentPostText)) {
-          sponsorPostCount++;
-          break;
-        }
-      }
-
-    }
-
-    return sponsorPostCount;
-  }
-
-
 // Builds JSON object to display data
   function buildJSON() {
     if (onUserPage() && onInstagram()){
@@ -138,6 +100,43 @@
 
     }
 
+  }
+
+// userJson.user.media.nodes every image
+//userJson.user.media.nodes.length is the size of the array
+// userJson.user.media.nodes[i] object
+//userJson.user.media.nodes[0].comments.count comment count
+//userJson.user.media.nodes[0].likes.count like count
+  function commentLikeRatio(userJson) {
+    var sumRatios = 0;
+    var nodes = userJson.user.media.nodes.length;
+    for (i = 0; i < nodes; i++) {
+      // console.log(userJson.user.media.nodes[i].likes.count + "/" +
+      //     userJson.user.media.nodes[i].comments.count+ "\n");
+      sumRatios += userJson.user.media.nodes[i].likes.count / userJson.user.media.nodes[i].comments.count;
+    }
+    var avg = sumRatios/nodes;
+      return avg;
+  }
+
+  function sponsorMetrics(mediaJson){
+    var sponsorPostCount = 0;
+    var items = mediaJson.items.length;
+    var tags = ["#sponsor","#sponsored","#ad","#advertisement","#promotion"];
+
+    for (i = 0; i < items; i++) {
+      currentPostText = mediaJson.items[i].caption.text
+
+      for (var j = 0; j < tags.length; j++) {
+        if (RegExp(tags[j]).test(currentPostText)) {
+          sponsorPostCount++;
+          break;
+        }
+      }
+
+    }
+
+    return sponsorPostCount;
   }
 
 // checks if the user ison instagram.com
