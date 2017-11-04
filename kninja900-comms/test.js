@@ -1,3 +1,10 @@
+function getCurrentTabURL(callback) {
+  chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
+    callback(arrayOfTabs[0].url);
+  });
+}
+
+
 //TODO: Clean up comments and write real documentation on how this was executed at a later time -Erica
 
 // Initializing the variable title content and explore url
@@ -29,78 +36,74 @@
 
 // Builds JSON object to display data
   function buildJSON() {
-    if (onUserPage() && onInstagram()){
-      var user = userJSON();
-      var media = mediaJSON();
+    getCurrentTabURL((url) => {
+      if (onUserPage(url) && onInstagram(url)){
+        var user = userJSON(url);
+        var media = mediaJSON(url);
 
-      if (user && media) {
-        // analyze user here and update jsonData
+        if (user && media) {
+          // analyze user here and update jsonData
 
-        if (user.user.biography) {
-          var email = extractEmails(user.user.biography);
-          var website = extractWebsite(user.user.biography);
-          if (email) {
-            jsonData.email = email;
+          if (user.user.biography) {
+            var email = extractEmails(user.user.biography);
+            var website = extractWebsite(user.user.biography);
+            if (email) {
+              jsonData.email = email;
+            }
           }
-        }
 
-        if (user.user.external_url) {
-          jsonData.website = user.user.external_url;
+          if (user.user.external_url) {
+            jsonData.website = user.user.external_url;
+          } else {
+            // checking bio for url
+            if (website) {
+              jsonData.website = website;
+            }
+          }
+
+          jsonData.id = user.user.id;
+          jsonData.username = user.user.username;
+          jsonData.fullname = user.user.full_name;
+          jsonData.followers = user.user.followed_by.count;
+          jsonData.following = user.user.follows.count;
+          jsonData.sponsorPosts = sponsorMetrics(media);
+          jsonData.engagement.likesPerPost = likesPerPost(media.items);
+          jsonData.engagement.commentsPerPost = commentsPerPost(media.items);
+          jsonData.engagement.engPerPost = engPerPost(media.items);
+          jsonData.engagement.postEngRate = postEngRate(jsonData.engagement.engPerPost, user.user.followed_by.count);
+          jsonData.engagement.likeCommentRatio = commentLikeRatio(user);
+
+          // Determine influencerType
+          switch (true) {
+            case jsonData.followers > 1000000:
+              jsonData.influencerType = "Mega";
+              break;
+            case jsonData.followers > 50000:
+              jsonData.influencerType = "Macro";
+              break;
+            case jsonData.followers > 5000:
+              jsonData.influencerType = "Micro";
+              break;
+            default:
+              jsonData.influencerType = "Nano";
+              break;
+          }
+
+          // Current data from user.  this is where we would update the popup.html
+          console.log(jsonData);
+
+          // Capturing the contents of the title tag
+          title = $("title").html();
+
         } else {
-          // checking bio for url
-          if (website) {
-            jsonData.website = website;
-          }
+          console.log("There is no json at /?__a=1");
+          console.log("Or There is no JSON object for /media");
         }
-
-        jsonData.id = user.user.id;
-        jsonData.username = user.user.username;
-        jsonData.fullname = user.user.full_name;
-        jsonData.followers = user.user.followed_by.count;
-        jsonData.following = user.user.follows.count;
-        jsonData.sponsorPosts = sponsorMetrics(media);
-        jsonData.engagement.likesPerPost = likesPerPost(media.items);
-        jsonData.engagement.commentsPerPost = commentsPerPost(media.items);
-        jsonData.engagement.engPerPost = engPerPost(media.items);
-        jsonData.engagement.postEngRate = postEngRate(jsonData.engagement.engPerPost, user.user.followed_by.count);
-        jsonData.engagement.likeCommentRatio = commentLikeRatio(user);
-
-        // Determine influencerType
-        switch (true) {
-          case jsonData.followers > 1000000:
-            jsonData.influencerType = "Mega";
-            break;
-          case jsonData.followers > 50000:
-            jsonData.influencerType = "Macro";
-            break;
-          case jsonData.followers > 5000:
-            jsonData.influencerType = "Micro";
-            break;
-          default:
-            jsonData.influencerType = "Nano";
-            break;
-        }
-
-        // Current data from user.  this is where we would update the popup.html
-        console.log(jsonData);
-
-        // Sending data to popup.js
-        // chrome.runtime.sendMessage(jsonData, function(response) {
-        //   // console.log(response.farewell);
-        // });
-
-        chrome.storage.local.set(jsonData);
-
-        // Capturing the contents of the title tag
-        title = $("title").html();
 
       } else {
-        console.log("There is no json at /?__a=1");
-        console.log("Or There is no JSON object for /media");
+        console.log("Not on instagram");
       }
-
-    }
-
+    });
   }
 
 // userJson.user.media.nodes every image
@@ -119,6 +122,7 @@
     var avg = sumRatios/nodes;
       return avg;
   }
+
 
   function sponsorMetrics(mediaJson){
     var sponsorPostCount = 0;
@@ -141,8 +145,8 @@
   }
 
 // checks if the user ison instagram.com
-  function onInstagram() {
-    if(window.location.href.indexOf("instagram.com") > -1) {
+  function onInstagram(url) {
+    if(url.indexOf("instagram.com") > -1) {
       // alert("you are on an instagram page when you refresh the page");
       return true;
     }
@@ -150,21 +154,21 @@
 
 // function for identifying if on user page
 // how is this actually working?  can we make it more specific for user only?
-  function onUserPage() {
+  function onUserPage(url) {
     var exp = "instagram\.com\/([\.a-z0-9_-]+?)\/$";
     var regex = new RegExp(exp); //instagram.com/[user]/
-    if (regex.test(window.location.href) && window.location.href != explore){
+    if (regex.test(url) && url != explore) {
         // alert("regex works, can put logic for recognizing an instagram user here");
         return true;
     }
   }
 
 // Pulling JSON for /media
-  function mediaJSON() {
+  function mediaJSON(url) {
     var json;
     // Using .ajax so that async can be set to false allowing for returning the json element from the function
     $.ajax({
-      url: window.location.href + "media/",
+      url: url + "media/",
       dataType: 'json', //data type received from server
       async: false, //set to false so that value can be returned
       success: function(data) {
@@ -175,11 +179,11 @@
   }
 
 // Pulling JSON object from /?__a=1
-  function userJSON() {
+  function userJSON(url) {
     var json;
     // Using .ajax so that async can be set to false allowing for returning the json element from the function
     $.ajax({
-      url: window.location.href + "?__a=1",
+      url: url + "?__a=1",
       dataType: 'json', //data type received from server
       async: false, //set to false so that value can be returned
       success: function(data) {
@@ -267,32 +271,9 @@
 
 // This code will execute when elements are modified under the body element
 // update to title and DOMelement subtree
-  $("body").bind("click", function() {
-    // or just instagram
-    if (title != $('title').html()) {
-      buildJSON();
-    }
-  });
-
-// trying to trigger off of article tag with class of ._mesn5 as that is specific to user page
-  // instagram uses react, look for specific DOM tree element
-  $("._mesn5").bind("onload", function() {
-    // or just instagram
-    if (title != $('title').html()) {
-      buildJSON();
-    }
-  });
-
-
-  // var port = chrome.runtime.connect({name: "knockknock"});
-  // port.postMessage({joke: "Knock knock"});
-  // port.onMessage.addListener(function(msg) {
-  //   if (msg.question == "Who's there?") {
-  //     console.log("msg.question");
-  //     port.postMessage({answer: "Madame"});
-  //   }
-  //   else if (msg.question == "Madame who?") {
-  //     console.log("msg.question");
-  //     port.postMessage({answer: "Madame... Bovary"});
-  //   }
-  // });
+$("body").bind("click", function() {
+  // or just instagram
+  if (title != $('title').html()) {
+    buildJSON();
+  }
+});
