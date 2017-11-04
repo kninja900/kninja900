@@ -85,10 +85,11 @@
         console.log(jsonData);
 
         // Sending data to popup.js
-        chrome.runtime.sendMessage(jsonData, function(response) {
-          // console.log(response.farewell);
-          return true;
-        });
+        // chrome.runtime.sendMessage(jsonData, function(response) {
+        //   // console.log(response.farewell);
+        // });
+
+        chrome.storage.local.set(jsonData);
 
         // Capturing the contents of the title tag
         title = $("title").html();
