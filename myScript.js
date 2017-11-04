@@ -123,13 +123,18 @@
         // Current data from user.  this is where we would update the popup.html
         console.log(jsonData);
 
+        // Sending data to popup.js
+        chrome.runtime.sendMessage(jsonData, function(response) {
+          console.log(response.farewell);
+        });
+
+        // Capturing the contents of the title tag
+        title = $("title").html();
+
       } else {
         console.log("There is no json at /?__a=1");
         console.log("Or There is no JSON object for /media");
       }
-
-      // Capturing the contents of the title tag
-      title = $("title").html();
 
     }
 
@@ -277,10 +282,3 @@
       buildJSON();
     }
   });
-
-//working on communicating with popup.js
-  function returnJSON () {
-      buildJSON();
-      return jsonData
-  }
-  // chrome.runtime.connect(extensionId, object{nameOfConnection, TlsChanId});
