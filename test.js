@@ -1,106 +1,276 @@
-// Get current URL
-function getCurrentTabUrl(callback) {
-  // Query filter to be passed to chrome.tabs.query - see
-  // https://developer.chrome.com/extensions/tabs#method-query
-  var queryInfo = {
-    active: true,
-    currentWindow: true
+function currentURL() {
+  chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
+    return arrayOfTabs[0].url;
+  });
+}
+
+//TODO: Clean up comments and write real documentation on how this was executed at a later time -Erica
+
+// Initializing the variable title content and explore url
+  var title;
+  var explore = 'https://www.instagram.com/explore/';
+
+// Initalizing JSON object, setting up specific data to send to mavrck
+  var jsonData = {
+    "id" : "",
+    "username" : "",
+    "fullname" : "",
+    "email" : "",
+    "website" : "",
+    "followers" : "",
+    "following" : "",
+    "influencerType" : "",
+    "sponsorPosts" : "",
+    "engagement" : {
+      "likesPerPost": "",
+      "commentsPerPost": "",
+      "engPerPost": "",
+      "postEngRate": "",
+      "followers" : "",
+      "likeCommentRatio" : "",
+      "perPost" : "",
+      "Post" : ""
+    }
   };
-  chrome.tabs.query(queryInfo, (tabs) => {
-    // chrome.tabs.query invokes the callback with a list of tabs that match the
-    // query. When the popup is opened, there is certainly a window and at least
-    // one tab, so we can safely assume that |tabs| is a non-empty array.
-    // A window can only have one active tab at a time, so the array consists of
-    // exactly one tab.
-    var tab = tabs[0];
-    // A tab is a plain object that provides information about the tab.
-    // See https://developer.chrome.com/extensions/tabs#type-Tab
-    var url = tab.url;
-    // tab.url is only available if the "activeTab" permission is declared.
-    // If you want to see the URL of other tabs (e.g. after removing active:true
-    // from |queryInfo|), then the "tabs" permission is required to see their
-    // "url" properties.
-    console.assert(typeof url == 'string', 'tab.url should be a string');
-    callback(url);
-  });
-  // Most methods of the Chrome extension APIs are asynchronous. This means that
-  // you CANNOT do something like this:
-  //
-  // var url;
-  // chrome.tabs.query(queryInfo, (tabs) => {
-  //   url = tabs[0].url;
-  // });
-  // alert(url); // Shows "undefined", because chrome.tabs.query is async.
-}
-/**
- * Change the background color of the current page.
- *
- * @param {string} color The new background color.
- */
-function changeBackgroundColor(color) {
-  var script = 'document.body.style.backgroundColor="' + color + '";';
-  // See https://developer.chrome.com/extensions/tabs#method-executeScript.
-  // chrome.tabs.executeScript allows us to programmatically inject JavaScript
-  // into a page. Since we omit the optional first argument "tabId", the script
-  // is inserted into the active tab of the current window, which serves as the
-  // default.
-  chrome.tabs.executeScript({
-    code: script
-  });
-}
-/**
- * Gets the saved background color for url.
- *
- * @param {string} url URL whose background color is to be retrieved.
- * @param {function(string)} callback called with the saved background color for
- *     the given url on success, or a falsy value if no color is retrieved.
- */
-function getSavedBackgroundColor(url, callback) {
-  // See https://developer.chrome.com/apps/storage#type-StorageArea. We check
-  // for chrome.runtime.lastError to ensure correctness even when the API call
-  // fails.
-  chrome.storage.sync.get(url, (items) => {
-    callback(chrome.runtime.lastError ? null : items[url]);
-  });
-}
-/**
- * Sets the given background color for url.
- *
- * @param {string} url URL for which background color is to be saved.
- * @param {string} color The background color to be saved.
- */
-function saveBackgroundColor(url, color) {
-  var items = {};
-  items[url] = color;
-  // See https://developer.chrome.com/apps/storage#type-StorageArea. We omit the
-  // optional callback since we don't need to perform any action once the
-  // background color is saved.
-  chrome.storage.sync.set(items);
-}
-// This extension loads the saved background color for the current tab if one
-// exists. The user can select a new background color from the dropdown for the
-// current page, and it will be saved as part of the extension's isolated
-// storage. The chrome.storage API is used for this purpose. This is different
-// from the window.localStorage API, which is synchronous and stores data bound
-// to a document's origin. Also, using chrome.storage.sync instead of
-// chrome.storage.local allows the extension data to be synced across multiple
-// user devices.
-document.addEventListener('DOMContentLoaded', () => {
-  getCurrentTabUrl((url) => {
-    var dropdown = document.getElementById('dropdown');
-    // Load the saved background color for this page and modify the dropdown
-    // value, if needed.
-    getSavedBackgroundColor(url, (savedColor) => {
-      if (savedColor) {
-        changeBackgroundColor(savedColor);
-        dropdown.value = savedColor;
+
+// Builds JSON object to display data
+  function buildJSON() {
+    if (onUserPage() && onInstagram()){
+      var user = userJSON();
+      var media = mediaJSON();
+
+      if (user && media) {
+        // analyze user here and update jsonData
+
+        if (user.user.biography) {
+          var email = extractEmails(user.user.biography);
+          var website = extractWebsite(user.user.biography);
+          if (email) {
+            jsonData.email = email;
+          }
+        }
+
+        if (user.user.external_url) {
+          jsonData.website = user.user.external_url;
+        } else {
+          // checking bio for url
+          if (website) {
+            jsonData.website = website;
+          }
+        }
+
+        jsonData.id = user.user.id;
+        jsonData.username = user.user.username;
+        jsonData.fullname = user.user.full_name;
+        jsonData.followers = user.user.followed_by.count;
+        jsonData.following = user.user.follows.count;
+        jsonData.sponsorPosts = sponsorMetrics(media);
+        jsonData.engagement.likesPerPost = likesPerPost(media.items);
+        jsonData.engagement.commentsPerPost = commentsPerPost(media.items);
+        jsonData.engagement.engPerPost = engPerPost(media.items);
+        jsonData.engagement.postEngRate = postEngRate(jsonData.engagement.engPerPost, user.user.followed_by.count);
+        jsonData.engagement.likeCommentRatio = commentLikeRatio(user);
+
+        // Determine influencerType
+        switch (true) {
+          case jsonData.followers > 1000000:
+            jsonData.influencerType = "Mega";
+            break;
+          case jsonData.followers > 50000:
+            jsonData.influencerType = "Macro";
+            break;
+          case jsonData.followers > 5000:
+            jsonData.influencerType = "Micro";
+            break;
+          default:
+            jsonData.influencerType = "Nano";
+            break;
+        }
+
+        // Current data from user.  this is where we would update the popup.html
+        console.log(jsonData);
+
+        // Capturing the contents of the title tag
+        title = $("title").html();
+
+      } else {
+        console.log("There is no json at /?__a=1");
+        console.log("Or There is no JSON object for /media");
+      }
+
+    } else {
+      console.log("Not on instagram");
+    }
+
+  }
+
+// userJson.user.media.nodes every image
+//userJson.user.media.nodes.length is the size of the array
+// userJson.user.media.nodes[i] object
+//userJson.user.media.nodes[0].comments.count comment count
+//userJson.user.media.nodes[0].likes.count like count
+  function commentLikeRatio(userJson) {
+    var sumRatios = 0;
+    var nodes = userJson.user.media.nodes.length;
+    for (i = 0; i < nodes; i++) {
+      // console.log(userJson.user.media.nodes[i].likes.count + "/" +
+      //     userJson.user.media.nodes[i].comments.count+ "\n");
+      sumRatios += userJson.user.media.nodes[i].likes.count / userJson.user.media.nodes[i].comments.count;
+    }
+    var avg = sumRatios/nodes;
+      return avg;
+  }
+
+  function sponsorMetrics(mediaJson){
+    var sponsorPostCount = 0;
+    var items = mediaJson.items.length;
+    var tags = ["#sponsor","#sponsored","#ad","#advertisement","#promotion"];
+
+    for (i = 0; i < items; i++) {
+      currentPostText = mediaJson.items[i].caption.text
+
+      for (var j = 0; j < tags.length; j++) {
+        if (RegExp(tags[j]).test(currentPostText)) {
+          sponsorPostCount++;
+          break;
+        }
+      }
+
+    }
+
+    return sponsorPostCount;
+  }
+
+// checks if the user ison instagram.com
+  function onInstagram() {
+    if(currentURL().indexOf("instagram.com") > -1) {
+      // alert("you are on an instagram page when you refresh the page");
+      return true;
+    }
+  }
+
+// function for identifying if on user page
+// how is this actually working?  can we make it more specific for user only?
+  function onUserPage() {
+    var exp = "instagram\.com\/([\.a-z0-9_-]+?)\/$";
+    var regex = new RegExp(exp); //instagram.com/[user]/
+    if (regex.test(currentURL()) && currentURL() != explore){
+        // alert("regex works, can put logic for recognizing an instagram user here");
+        return true;
+    }
+  }
+
+// Pulling JSON for /media
+  function mediaJSON() {
+    var json;
+    // Using .ajax so that async can be set to false allowing for returning the json element from the function
+    $.ajax({
+      url: currentURL() + "media/",
+      dataType: 'json', //data type received from server
+      async: false, //set to false so that value can be returned
+      success: function(data) {
+        json = data
       }
     });
-    // Ensure the background color is changed and saved when the dropdown
-    // selection changes.
-    dropdown.addEventListener('change', () => {
-      changeBackgroundColor(dropdown.value);
-      saveBackgroundColor(url, dropdown.value);
+    return json;
+  }
+
+// Pulling JSON object from /?__a=1
+  function userJSON() {
+    var json;
+    // Using .ajax so that async can be set to false allowing for returning the json element from the function
+    $.ajax({
+      url: currentURL() + "?__a=1",
+      dataType: 'json', //data type received from server
+      async: false, //set to false so that value can be returned
+      success: function(data) {
+        json = data
+      }
     });
-  });
+    return json;
+  }
+
+// Likes per Post = (Sum Likes Comments) / Post Count (last 20 posts or 90 days, whichever is shorter)
+  function likesPerPost(posts){
+    var total=0;
+    for (var i = 0; i < posts.length; i++) {
+      total += posts[i].likes.count;
+    }
+    return total/posts.length;
+  }
+
+//Comments per post =   (Sum Post Comments) / Post Count
+  function commentsPerPost(posts){
+    var total=0;
+    for (var i = 0; i < posts.length; i++) {
+      total += posts[i].comments.count;
+    }
+    return total/posts.length;
+  }
+
+//Engagement per post (likes + comments / last 20 posts)
+  function engPerPost(posts){
+    var total=0;
+    for (var i = 0; i < posts.length; i++) {
+      total += posts[i].comments.count + posts[i].likes.count;
+    }
+    return total/posts.length;
+  }
+
+//Engagement rate: (Post Likes + Post Comments) / Follower Count
+  function postEngRate(engagement,followers) {
+    return (engagement/followers)*100;
+  }
+
+// Scraping Email from Bio
+  function extractEmails (bio){
+      return bio.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi);
+  }
+
+  function extractWebsite (bio){
+  	var foundSites = bio.match(/[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi);
+    if (foundSites) {
+      var websites = [];
+      var regexVariable = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/i;
+      var regexTest = new RegExp(regexVariable);
+      var j = 0;
+      for (var i = 0; i < foundSites.length; i++) {
+        if (regexTest.test(foundSites[i]) == false) {
+          websites[j] = foundSites[i];
+          j = j + 1;
+        }
+      }
+
+      return websites;
+    } else {
+      return false;
+    }
+  }
+
+// sending JSON to endpoint - will be Mavrck API
+  function sendJSON (json) {
+    $.ajax({
+      // url: , // Mavrck endpoint
+      data: json,
+      dataType: 'json',
+      success: function(msg) {
+        if (msg) {
+          alert("sent");
+        } else {
+          alert("error");
+        }
+      }
+    });
+  }
+
+// Calling buildJSON to run code on load
+  buildJSON();
+
+// This code will execute when elements are modified under the body element
+// update to title and DOMelement subtree
+$("body").bind("click", function() {
+  // or just instagram
+  if (title != $('title').html()) {
+    buildJSON();
+  }
 });
