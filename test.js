@@ -143,7 +143,8 @@ function currentURL() {
 
 // checks if the user ison instagram.com
   function onInstagram() {
-    if(currentURL().indexOf("instagram.com") > -1) {
+    var url = currentURL();
+    if(url.indexOf("instagram.com") > -1) {
       // alert("you are on an instagram page when you refresh the page");
       return true;
     }
@@ -152,9 +153,10 @@ function currentURL() {
 // function for identifying if on user page
 // how is this actually working?  can we make it more specific for user only?
   function onUserPage() {
+    var url = currentURL();
     var exp = "instagram\.com\/([\.a-z0-9_-]+?)\/$";
     var regex = new RegExp(exp); //instagram.com/[user]/
-    if (regex.test(currentURL()) && currentURL() != explore){
+    if (regex.test(url) && url != explore){
         // alert("regex works, can put logic for recognizing an instagram user here");
         return true;
     }
@@ -163,9 +165,10 @@ function currentURL() {
 // Pulling JSON for /media
   function mediaJSON() {
     var json;
+    var url = currentURL();
     // Using .ajax so that async can be set to false allowing for returning the json element from the function
     $.ajax({
-      url: currentURL() + "media/",
+      url: url + "media/",
       dataType: 'json', //data type received from server
       async: false, //set to false so that value can be returned
       success: function(data) {
@@ -178,9 +181,10 @@ function currentURL() {
 // Pulling JSON object from /?__a=1
   function userJSON() {
     var json;
+    var url = currentURL();
     // Using .ajax so that async can be set to false allowing for returning the json element from the function
     $.ajax({
-      url: currentURL() + "?__a=1",
+      url: url + "?__a=1",
       dataType: 'json', //data type received from server
       async: false, //set to false so that value can be returned
       success: function(data) {
