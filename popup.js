@@ -130,15 +130,16 @@ function getCurrentTabURL(callback) {
     var tags = ["#sponsor","#sponsored","#ad","#advertisement","#promotion"];
 
     for (i = 0; i < items; i++) {
-      currentPostText = mediaJson.items[i].caption.text
+      if (mediaJson.items[i].caption) {
+        currentPostText = mediaJson.items[i].caption.text
 
-      for (var j = 0; j < tags.length; j++) {
-        if (RegExp(tags[j]).test(currentPostText)) {
-          sponsorPostCount++;
-          break;
+        for (var j = 0; j < tags.length; j++) {
+          if (RegExp(tags[j]).test(currentPostText)) {
+            sponsorPostCount++;
+            break;
+          }
         }
       }
-
     }
 
     return sponsorPostCount;
