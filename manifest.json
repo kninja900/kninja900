@@ -12,29 +12,11 @@
   	"default_icon": "popup.png"
   },
 
-  "background": {
-    "scripts": [
-      "jquery-3.2.1.min.js",
-      "myScript.js",
-      "popup.js"
-    ]
-  },
-
   "permissions": [
 	   "notifications",
      "activeTab",
      "storage",
      "identity",
      "tabs"
-  ],
-
-   "content_scripts": [
-    {
-      "matches": ["https://www.instagram.com/*"],
-      "js": [
-        "jquery-3.2.1.min.js",
-        "myScript.js"
-      ]
-    }
   ]
 }
