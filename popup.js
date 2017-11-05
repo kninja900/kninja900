@@ -272,7 +272,7 @@ function getCurrentTabURL(callback) {
 
 // This code will execute when elements are modified under the body element
 // update to title and DOMelement subtree
-$("body").bind("click", function() {
+$(window).on("load", function() {
   // or just instagram
   if (title != $('title').html()) {
     buildJSON();
