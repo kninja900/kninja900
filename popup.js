@@ -276,10 +276,8 @@ $("body").bind("click", function() {
   if (title != $('title').html()) {
     buildJSON();
   }
-
   document.getElementById('iType').innerHTML = jsonData.influencerType;
   document.getElementById('engRate').innerHTML = jsonData.engagement.engPerPost;
   document.getElementById('avgComments').innerHTML = jsonData.engagement.commentsPerPost
   document.getElementById('avgLikes').innerHTML =  jsonData.engagement.likesPerPost;
- 
 });
