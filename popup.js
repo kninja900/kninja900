@@ -267,8 +267,17 @@ function getCurrentTabURL(callback) {
     });
   }
 
+  // Update UI
+  function updateUI() {
+    document.getElementById('iType').innerHTML = jsonData.influencerType;
+    document.getElementById('engRate').innerHTML = jsonData.engagement.engPerPost;
+    document.getElementById('avgComments').innerHTML = jsonData.engagement.commentsPerPost
+    document.getElementById('avgLikes').innerHTML =  jsonData.engagement.likesPerPost;
+  }
+
 // Calling buildJSON to run code on load
   buildJSON();
+  updateUI();
 
 // This code will execute when elements are modified under the body element
 // update to title and DOMelement subtree
@@ -277,8 +286,14 @@ $(window).on("load", function() {
   if (title != $('title').html()) {
     buildJSON();
   }
-  document.getElementById('iType').innerHTML = jsonData.influencerType;
-  document.getElementById('engRate').innerHTML = jsonData.engagement.engPerPost;
-  document.getElementById('avgComments').innerHTML = jsonData.engagement.commentsPerPost
-  document.getElementById('avgLikes').innerHTML =  jsonData.engagement.likesPerPost;
+  updateUI();
 });
+
+// With slow internet the on load doesn't seem to work
+  $("body").on("click", function() {
+    // or just instagram
+    if (title != $('title').html()) {
+      buildJSON();
+    }
+    updateUI();
+  });
