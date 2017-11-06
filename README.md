@@ -25,7 +25,15 @@ To install this extension you will first need to install Google chrome on your d
 
 2. Click the link in your email and you will be brought to the google chrome web store for this extension
 
-![alt text](images/install_link.png)
+![alt text](images/chrome_popup.png)
+
+3. Click the **+ ADD TO CHROME** button in the upper right corner of the window.
+
+4. You will then be prompted with a popup window asking if you would like to Add Kninja900 to Chrome. Click the **Add Extension** button 
+
+![alt text](images/ask_permission.png)
+
+
 
 
 
