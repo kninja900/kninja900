@@ -17,5 +17,7 @@
      "storage",
      "identity",
      "tabs"
-  ]
+  ],
+
+  "content_security_policy": "script-src 'self' http://app.splashscore.com; object-src 'self'"
 }
