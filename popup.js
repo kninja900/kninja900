@@ -39,9 +39,10 @@ function getCurrentTabURL(callback) {
     getCurrentTabURL((url) => {
       if (onUserPage(url) && onInstagram(url)){
         var user = userJSON(url);
-        var media = mediaJSON(url);
+        // var media = mediaJSON(url);
 
-        if (user && media) {
+        // if (user && media) {
+        if (user) {
           // analyze user here and update jsonData
 
           if (user.user.biography) {
@@ -66,10 +67,10 @@ function getCurrentTabURL(callback) {
           jsonData.fullname = user.user.full_name;
           jsonData.followers = user.user.followed_by.count;
           jsonData.following = user.user.follows.count;
-          jsonData.sponsorPosts = sponsorMetrics(media);
-          jsonData.engagement.likesPerPost = likesPerPost(media.items);
-          jsonData.engagement.commentsPerPost = commentsPerPost(media.items);
-          jsonData.engagement.engPerPost = engPerPost(media.items);
+          jsonData.sponsorPosts = sponsorMetrics(user.user.media);
+          jsonData.engagement.likesPerPost = likesPerPost(user.user.media.nodes);
+          jsonData.engagement.commentsPerPost = commentsPerPost(user.user.media.nodes);
+          jsonData.engagement.engPerPost = engPerPost(user.user.media.nodes);
           jsonData.engagement.postEngRate = postEngRate(jsonData.engagement.engPerPost, user.user.followed_by.count);
           jsonData.engagement.likeCommentRatio = commentLikeRatio(user);
 
@@ -124,14 +125,14 @@ function getCurrentTabURL(callback) {
   }
 
 
-  function sponsorMetrics(mediaJson){
+  function sponsorMetrics(userJson){
     var sponsorPostCount = 0;
-    var items = mediaJson.items.length;
+    var items = userJson.nodes.length;
     var tags = ["#sponsor","#sponsored","#ad","#advertisement","#promotion"];
 
     for (i = 0; i < items; i++) {
-      if (mediaJson.items[i].caption) {
-        currentPostText = mediaJson.items[i].caption.text
+      if (userJson.nodes[i].caption) {
+        currentPostText = userJson.nodes[i].caption.text
 
         for (var j = 0; j < tags.length; j++) {
           if (RegExp(tags[j]).test(currentPostText)) {
@@ -162,21 +163,6 @@ function getCurrentTabURL(callback) {
         // alert("regex works, can put logic for recognizing an instagram user here");
         return true;
     }
-  }
-
-// Pulling JSON for /media
-  function mediaJSON(url) {
-    var json;
-    // Using .ajax so that async can be set to false allowing for returning the json element from the function
-    $.ajax({
-      url: url + "media/",
-      dataType: 'json', //data type received from server
-      async: false, //set to false so that value can be returned
-      success: function(data) {
-        json = data
-      }
-    });
-    return json;
   }
 
 // Pulling JSON object from /?__a=1
