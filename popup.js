@@ -39,9 +39,6 @@ function getCurrentTabURL(callback) {
     getCurrentTabURL((url) => {
       if (onUserPage(url) && onInstagram(url)){
         var user = userJSON(url);
-        // var media = mediaJSON(url);
-
-        // if (user && media) {
         if (user) {
           // analyze user here and update jsonData
 
@@ -90,15 +87,14 @@ function getCurrentTabURL(callback) {
               break;
           }
 
-          // Current data from user.  this is where we would update the popup.html
-          console.log(jsonData);
+          // Current data from user. for troubleshooting
+          // console.log(jsonData);
 
           // Capturing the contents of the title tag
           title = $("title").html();
 
         } else {
           console.log("There is no json at /?__a=1");
-          console.log("Or There is no JSON object for /media");
         }
 
       } else {
@@ -116,14 +112,11 @@ function getCurrentTabURL(callback) {
     var sumRatios = 0;
     var nodes = userJson.user.media.nodes.length;
     for (i = 0; i < nodes; i++) {
-      // console.log(userJson.user.media.nodes[i].likes.count + "/" +
-      //     userJson.user.media.nodes[i].comments.count+ "\n");
       sumRatios += userJson.user.media.nodes[i].likes.count / userJson.user.media.nodes[i].comments.count;
     }
     var avg = sumRatios/nodes;
       return avg;
   }
-
 
   function sponsorMetrics(userJson){
     var sponsorPostCount = 0;
