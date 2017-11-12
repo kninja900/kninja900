@@ -68,11 +68,11 @@ function getCurrentTabURL(callback) {
           jsonData.followers = user.user.followed_by.count;
           jsonData.following = user.user.follows.count;
           jsonData.sponsorPosts = sponsorMetrics(user.user.media);
-          jsonData.engagement.likesPerPost = likesPerPost(user.user.media.nodes);
-          jsonData.engagement.commentsPerPost = commentsPerPost(user.user.media.nodes);
-          jsonData.engagement.engPerPost = engPerPost(user.user.media.nodes);
-          jsonData.engagement.postEngRate = postEngRate(jsonData.engagement.engPerPost, user.user.followed_by.count);
-          jsonData.engagement.likeCommentRatio = commentLikeRatio(user);
+          jsonData.engagement.likesPerPost = likesPerPost(user.user.media.nodes).toFixed(2);
+          jsonData.engagement.commentsPerPost = commentsPerPost(user.user.media.nodes).toFixed(2);
+          jsonData.engagement.engPerPost = engPerPost(user.user.media.nodes).toFixed(2);
+          jsonData.engagement.postEngRate = postEngRate(jsonData.engagement.engPerPost, user.user.followed_by.count).toFixed(2);
+          jsonData.engagement.likeCommentRatio = commentLikeRatio(user).toFixed(2);
 
           // Determine influencerType
           switch (true) {
@@ -253,18 +253,31 @@ function getCurrentTabURL(callback) {
     });
   }
 
+// Update UI
+  function updateUI() {
+    document.getElementById('iType').innerHTML = jsonData.influencerType;
+    document.getElementById('engRate').innerHTML = jsonData.engagement.engPerPost;
+    document.getElementById('avgComments').innerHTML = jsonData.engagement.commentsPerPost;
+    document.getElementById('avgLikes').innerHTML =  jsonData.engagement.likesPerPost;
+  }
+
 // Calling buildJSON to run code on load
   buildJSON();
 
 // This code will execute when elements are modified under the body element
 // update to title and DOMelement subtree
-$(window).on("load", function() {
-  // or just instagram
-  if (title != $('title').html()) {
-    buildJSON();
-  }
-  document.getElementById('iType').innerHTML = jsonData.influencerType;
-  document.getElementById('engRate').innerHTML = jsonData.engagement.engPerPost;
-  document.getElementById('avgComments').innerHTML = jsonData.engagement.commentsPerPost
-  document.getElementById('avgLikes').innerHTML =  jsonData.engagement.likesPerPost;
-});
+  $(window).on("load", function() {
+    // or just instagram
+    if (title != $('title').html()) {
+      buildJSON();
+    }
+    updateUI();
+  });
+
+  $("body").on("click", function() {
+    // or just instagram
+    if (title != $('title').html()) {
+      buildJSON();
+    }
+    updateUI();
+  });
