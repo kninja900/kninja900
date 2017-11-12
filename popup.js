@@ -39,9 +39,7 @@ function getCurrentTabURL(callback) {
     getCurrentTabURL((url) => {
       if (onUserPage(url) && onInstagram(url)){
         var user = userJSON(url);
-        var media = mediaJSON(url);
-
-        if (user && media) {
+        if (user) {
           // analyze user here and update jsonData
 
           if (user.user.biography) {
@@ -66,12 +64,12 @@ function getCurrentTabURL(callback) {
           jsonData.fullname = user.user.full_name;
           jsonData.followers = user.user.followed_by.count;
           jsonData.following = user.user.follows.count;
-          jsonData.sponsorPosts = sponsorMetrics(media);
-          jsonData.engagement.likesPerPost = likesPerPost(media.items);
-          jsonData.engagement.commentsPerPost = commentsPerPost(media.items);
-          jsonData.engagement.engPerPost = engPerPost(media.items);
-          jsonData.engagement.postEngRate = postEngRate(jsonData.engagement.engPerPost, user.user.followed_by.count);
-          jsonData.engagement.likeCommentRatio = commentLikeRatio(user);
+          jsonData.sponsorPosts = sponsorMetrics(user.user.media);
+          jsonData.engagement.likesPerPost = likesPerPost(user.user.media.nodes).toFixed(2);
+          jsonData.engagement.commentsPerPost = commentsPerPost(user.user.media.nodes).toFixed(2);
+          jsonData.engagement.engPerPost = engPerPost(user.user.media.nodes).toFixed(2);
+          jsonData.engagement.postEngRate = postEngRate(jsonData.engagement.engPerPost, user.user.followed_by.count).toFixed(2);
+          jsonData.engagement.likeCommentRatio = commentLikeRatio(user).toFixed(2);
 
           // Determine influencerType
           switch (true) {
@@ -89,15 +87,14 @@ function getCurrentTabURL(callback) {
               break;
           }
 
-          // Current data from user.  this is where we would update the popup.html
-          console.log(jsonData);
+          // Current data from user. for troubleshooting
+          // console.log(jsonData);
 
           // Capturing the contents of the title tag
           title = $("title").html();
 
         } else {
           console.log("There is no json at /?__a=1");
-          console.log("Or There is no JSON object for /media");
         }
 
       } else {
@@ -115,23 +112,20 @@ function getCurrentTabURL(callback) {
     var sumRatios = 0;
     var nodes = userJson.user.media.nodes.length;
     for (i = 0; i < nodes; i++) {
-      // console.log(userJson.user.media.nodes[i].likes.count + "/" +
-      //     userJson.user.media.nodes[i].comments.count+ "\n");
       sumRatios += userJson.user.media.nodes[i].likes.count / userJson.user.media.nodes[i].comments.count;
     }
     var avg = sumRatios/nodes;
       return avg;
   }
 
-
-  function sponsorMetrics(mediaJson){
+  function sponsorMetrics(userJson){
     var sponsorPostCount = 0;
-    var items = mediaJson.items.length;
+    var items = userJson.nodes.length;
     var tags = ["#sponsor","#sponsored","#ad","#advertisement","#promotion"];
 
     for (i = 0; i < items; i++) {
-      if (mediaJson.items[i].caption) {
-        currentPostText = mediaJson.items[i].caption.text
+      if (userJson.nodes[i].caption) {
+        currentPostText = userJson.nodes[i].caption.text
 
         for (var j = 0; j < tags.length; j++) {
           if (RegExp(tags[j]).test(currentPostText)) {
@@ -162,21 +156,6 @@ function getCurrentTabURL(callback) {
         // alert("regex works, can put logic for recognizing an instagram user here");
         return true;
     }
-  }
-
-// Pulling JSON for /media
-  function mediaJSON(url) {
-    var json;
-    // Using .ajax so that async can be set to false allowing for returning the json element from the function
-    $.ajax({
-      url: url + "media/",
-      dataType: 'json', //data type received from server
-      async: false, //set to false so that value can be returned
-      success: function(data) {
-        json = data
-      }
-    });
-    return json;
   }
 
 // Pulling JSON object from /?__a=1
@@ -267,18 +246,31 @@ function getCurrentTabURL(callback) {
     });
   }
 
+// Update UI
+  function updateUI() {
+    document.getElementById('iType').innerHTML = jsonData.influencerType;
+    document.getElementById('engRate').innerHTML = jsonData.engagement.engPerPost;
+    document.getElementById('avgComments').innerHTML = jsonData.engagement.commentsPerPost;
+    document.getElementById('avgLikes').innerHTML =  jsonData.engagement.likesPerPost;
+  }
+
 // Calling buildJSON to run code on load
   buildJSON();
 
 // This code will execute when elements are modified under the body element
 // update to title and DOMelement subtree
-$(window).on("load", function() {
-  // or just instagram
-  if (title != $('title').html()) {
-    buildJSON();
-  }
-  document.getElementById('iType').innerHTML = jsonData.influencerType;
-  document.getElementById('engRate').innerHTML = jsonData.engagement.engPerPost;
-  document.getElementById('avgComments').innerHTML = jsonData.engagement.commentsPerPost
-  document.getElementById('avgLikes').innerHTML =  jsonData.engagement.likesPerPost;
-});
+  $(window).on("load", function() {
+    // or just instagram
+    if (title != $('title').html()) {
+      buildJSON();
+    }
+    updateUI();
+  });
+
+  $("body").on("click", function() {
+    // or just instagram
+    if (title != $('title').html()) {
+      buildJSON();
+    }
+    updateUI();
+  });
