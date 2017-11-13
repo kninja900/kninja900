@@ -143,19 +143,22 @@
   }
 
 // sending JSON to endpoint - will be Mavrck API
-  function sendJSON (json) {
+function sendJSON (json) {
     $.ajax({
-      url: window.location.href + "json",
-      data: 'json',
-      success: function(msg) {
-        if (msg) {
-          alert("sent");
-        } else {
-          alert("error");
+        type: 'post',
+        // url: "google.com",
+        url: "http://app.splashscore.com/instagram-accounts?token=ff7434aab28e342b9e84505f8da8848ba6b0b7245291560fb7f07d5788596cb2c77749ea863140901a1d644fb68104db",  // Mavrck endpoint
+        data: {},
+        contentType: 'application/json',
+        dataType: 'json',
+        success: function(msg) {
+            console.log(msg);
+        },
+        error: function(msg) {
+            console.log(msg);
         }
-      }
     });
-  }
+}
 
   buildJSON();
 

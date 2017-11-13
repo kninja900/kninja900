@@ -16,6 +16,7 @@
      "activeTab",
      "storage",
      "identity",
-     "tabs"
+     "tabs",
+     "http://*.app.splashscore.com/*/"
   ]
 }

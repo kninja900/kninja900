@@ -287,20 +287,21 @@ function getCurrentTabURL(callback) {
   }
 
 // sending JSON to endpoint - will be Mavrck API
-  function sendJSON (json) {
+function sendJSON (json) {
     $.ajax({
-      // url: , // Mavrck endpoint
-      data: json,
-      dataType: 'json',
-      success: function(msg) {
-        if (msg) {
-          alert("sent");
-        } else {
-          alert("error");
+        type: 'post',
+        url: "http://app.splashscore.com/instagram-accounts?token=ff7434aab28e342b9e84505f8da8848ba6b0b7245291560fb7f07d5788596cb2c77749ea863140901a1d644fb68104db",  // Mavrck endpoint
+        data: json,
+        contentType: 'application/json',
+        dataType: 'json',
+        success: function(msg) {
+            console.log(msg);
+        },
+        error: function(msg) {
+            console.log(msg);
         }
-      }
     });
-  }
+}
 
 // Update UI
   function updateUI() {
@@ -311,7 +312,7 @@ function getCurrentTabURL(callback) {
   }
 
 // Calling buildJSON to run code on load
-  buildJSON();
+  var json = buildJSON();
 
 // This code will execute when elements are modified under the body element
 // update to title and DOMelement subtree
@@ -344,3 +345,27 @@ function getCurrentTabURL(callback) {
       updateUI();
     }
   });
+
+var data = {
+    source: "TOMAHAWK",
+    fullName: "Joe",
+    country: "user.country",
+    state: "user.state",
+    city: "user.city",
+    gender : "",
+    birthday : "",
+    email : "",
+    instagramAccount : {
+        id : "user.id",
+        handle : "user.handle",
+        followersCount : 4,
+        followingCount : 4,
+        fullName : "user.fullName",
+        profilePicture : "user.profilePicture",
+        bio : "user.biography",
+        mediaCount: 4,
+        averageLikes : 4,
+        averageComments : 4,
+        sponsoredPostRate : 1.44
+    }
+}
