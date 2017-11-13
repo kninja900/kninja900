@@ -301,6 +301,7 @@ function sendJSON (json) {
     var data = JSON.stringify(json);
     $.ajax({
         type: 'post',
+        // Leaving url commented out so we don't hit the database with un-needed users
         // url: "http://app.splashscore.com/instagram-accounts?token=ff7434aab28e342b9e84505f8da8848ba6b0b7245291560fb7f07d5788596cb2c77749ea863140901a1d644fb68104db",  // Mavrck endpoint
         data: data,
         crossDomain: true,
@@ -342,10 +343,6 @@ function sendJSON (json) {
     }
     updateUI();
 
-    if (moreTitle != $('title').html()) {
-      buildMore();
-      updateMoreUI();
-    }
   });
 
   $(".icon").on("click", function() {
