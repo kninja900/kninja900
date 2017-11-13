@@ -313,6 +313,36 @@ function sendJSON (json) {
     });
 }
 
+// Fake followers
+  function engVSFollowers() {
+    switch (true) {
+      // update percentages
+      case jsonData.followers > 1000000:
+        return checkOne(jsonData.engagement.postEngRate, 0.0166);
+        break;
+      case jsonData.followers > 100000:
+        return checkOne(jsonData.engagement.postEngRate, 0.0178);
+        break;
+      case jsonData.followers > 10000:
+        return checkOne(jsonData.engagement.postEngRate, 0.0237);
+        break;
+      case jsonData.followers > 1000:
+        return checkOne(jsonData.engagement.postEngRate, 0.0404);
+        break;
+      default:
+        return checkOne(jsonData.engagement.postEngRate, 0.0803);
+        break;
+    }
+  }
+
+  function checkOne(postEngRate, perPerc, commentRate, crPerc) {
+    if (postEngRate > perPerc) {
+      return "warning";
+    } else {
+      return "good";
+    }
+  }
+
 // Update UI
   function updateUI() {
     document.getElementById('iType').innerHTML = jsonData.influencerType;
