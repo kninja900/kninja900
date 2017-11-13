@@ -11,6 +11,7 @@ function getCurrentTabURL(callback) {
   var title;
   var moreTitle;
   var explore = 'https://www.instagram.com/explore/';
+  var developer = 'https://www.instagram.com/developer/';
 
 // Initalizing JSON object, setting up specific data to send to mavrck
   var jsonData = {
@@ -202,7 +203,7 @@ function getCurrentTabURL(callback) {
   function onUserPage(url) {
     var exp = "instagram\.com\/([\.a-z0-9_-]+?)\/$";
     var regex = new RegExp(exp); //instagram.com/[user]/
-    if (regex.test(url) && url != explore) {
+    if (regex.test(url) && url != explore && url != developer) {
         // alert("regex works, can put logic for recognizing an instagram user here");
         return true;
     }
@@ -362,14 +363,8 @@ function sendJSON (json) {
     updateMoreUI();
   });
 
-// Updates to all user data if Mavrck logo is clicked
-  $("#logo").on("click", function() {
-    if (moreTitle != $('title').html()) {
-      buildMore();
-      updateUI();
-    }
-  });
 
+// Data structure from Mavrck
 var data = {
     source: "TOMAHAWK",
     fullName: "Joe",
