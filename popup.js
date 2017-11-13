@@ -112,8 +112,6 @@ function getCurrentTabURL(callback) {
         if (user) {
           // analyze user here and update jsonData
           if (user.user.media.page_info.has_next_page) {
-            console.log("there is more");
-            // var num = 0;
             var moreJson = user;
             while (moreJson.user.media.page_info.has_next_page) {
               moreJson = nextUserPage(url, moreJson.user.media.page_info.end_cursor);
