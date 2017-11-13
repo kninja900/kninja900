@@ -9,6 +9,7 @@ function getCurrentTabURL(callback) {
 
 // Initializing the variable title content and explore url
   var title;
+  var moreTitle;
   var explore = 'https://www.instagram.com/explore/';
 
 // Initalizing JSON object, setting up specific data to send to mavrck
@@ -103,6 +104,46 @@ function getCurrentTabURL(callback) {
     });
   }
 
+// Getting additionaluser data
+  function buildMore() {
+    getCurrentTabURL((url) => {
+      if (onUserPage(url) && onInstagram(url)){
+        var user = userJSON(url);
+        if (user) {
+          // analyze user here and update jsonData
+          if (user.user.media.page_info.has_next_page) {
+            console.log("there is more");
+            // var num = 0;
+            var moreJson = user;
+            while (moreJson.user.media.page_info.has_next_page) {
+              moreJson = nextUserPage(url, moreJson.user.media.page_info.end_cursor);
+              user.user.media.nodes = user.user.media.nodes.concat(moreJson.user.media.nodes);
+            }
+
+          }
+          // for troubleshooting
+          // console.log(user);
+
+          jsonData.sponsorPosts = sponsorMetrics(user.user.media);
+          jsonData.engagement.likesPerPost = likesPerPost(user.user.media.nodes).toFixed(2);
+          jsonData.engagement.commentsPerPost = commentsPerPost(user.user.media.nodes).toFixed(2);
+          jsonData.engagement.engPerPost = engPerPost(user.user.media.nodes).toFixed(2);
+          jsonData.engagement.postEngRate = postEngRate(jsonData.engagement.engPerPost, user.user.followed_by.count).toFixed(2);
+          jsonData.engagement.likeCommentRatio = commentLikeRatio(user).toFixed(2);
+
+          // Capturing the contents of the title tag
+          moreTitle = $("title").html();
+
+        } else {
+          console.log("There is no json at /?__a=1, within buildMore");
+        }
+
+      } else {
+        console.log("Not on instagram, within buildMore");
+      }
+    });
+  }
+
 // userJson.user.media.nodes every image
 //userJson.user.media.nodes.length is the size of the array
 // userJson.user.media.nodes[i] object
@@ -164,6 +205,21 @@ function getCurrentTabURL(callback) {
     // Using .ajax so that async can be set to false allowing for returning the json element from the function
     $.ajax({
       url: url + "?__a=1",
+      dataType: 'json', //data type received from server
+      async: false, //set to false so that value can be returned
+      success: function(data) {
+        json = data
+      }
+    });
+    return json;
+  }
+
+// Pulling additional pages of user data
+  function nextUserPage(url, endCursor) {
+    var json;
+    // Using .ajax so that async can be set to false allowing for returning the json element from the function
+    $.ajax({
+      url: url + "?__a=1&max_id=" + endCursor,
       dataType: 'json', //data type received from server
       async: false, //set to false so that value can be returned
       success: function(data) {
@@ -265,6 +321,11 @@ function getCurrentTabURL(callback) {
       buildJSON();
     }
     updateUI();
+
+    if (moreTitle != $('title').html()) {
+      buildMore();
+      updateUI();
+    }
   });
 
   $("body").on("click", function() {
@@ -273,4 +334,13 @@ function getCurrentTabURL(callback) {
       buildJSON();
     }
     updateUI();
+
+  });
+
+// Updates to all user data if Mavrck logo is clicked
+  $("#logo").on("click", function() {
+    if (moreTitle != $('title').html()) {
+      buildMore();
+      updateUI();
+    }
   });
