@@ -83,8 +83,7 @@ function getCurrentTabURL(callback) {
           jsonData.engagement.engPerPost = engPerPost(user.user.media.nodes).toFixed(2);
           jsonData.engagement.postEngRate = postEngRate(jsonData.engagement.engPerPost, user.user.followed_by.count).toFixed(2);
           jsonData.engagement.likeCommentRatio = commentLikeRatio(user).toFixed(2);
-          jsonData.engagement.fake_followers = engVSFollowers();
-          console.log(jsonData.engagement.fake_followers);
+          jsonData.engagement.fake_followers = fakeFollowers();
 
           // Determine influencerType
           switch (true) {
@@ -142,6 +141,7 @@ function getCurrentTabURL(callback) {
           jsonData.lifetime_engagement.engPerPost = engPerPost(user.user.media.nodes).toFixed(2);
           jsonData.lifetime_engagement.postEngRate = postEngRate(jsonData.engagement.engPerPost, user.user.followed_by.count).toFixed(2);
           jsonData.lifetime_engagement.likeCommentRatio = commentLikeRatio(user).toFixed(2);
+          jsonData.lifetime_engagement.fake_followers = fakeFollowers();
 
           // Capturing the contents of the title tag
           moreTitle = $("title").html();
@@ -316,27 +316,27 @@ function sendJSON (json) {
 }
 
 // Fake followers
-  function engVSFollowers() {
+  function fakeFollowers() {
     switch (true) {
       case jsonData.followers > 1000000:
-        return checkOne(jsonData.engagement.postEngRate, 0.0166, 0.0006);
+        return engCheck(jsonData.engagement.postEngRate, 0.0166, 0.0006);
         break;
       case jsonData.followers > 100000:
-        return checkOne(jsonData.engagement.postEngRate, 0.0178, 0.0009);
+        return engCheck(jsonData.engagement.postEngRate, 0.0178, 0.0009);
         break;
       case jsonData.followers > 10000:
-        return checkOne(jsonData.engagement.postEngRate, 0.0237, 0.0014);
+        return engCheck(jsonData.engagement.postEngRate, 0.0237, 0.0014);
         break;
       case jsonData.followers > 1000:
-        return checkOne(jsonData.engagement.postEngRate, 0.0404, 0.0027);
+        return engCheck(jsonData.engagement.postEngRate, 0.0404, 0.0027);
         break;
       default:
-        return checkOne(jsonData.engagement.postEngRate, 0.0803, 0.0056);
+        return engCheck(jsonData.engagement.postEngRate, 0.0803, 0.0056);
         break;
     }
   }
 
-  function checkOne(postEngRate, perPerc, crPerc) {
+  function engCheck(postEngRate, perPerc, crPerc) {
     if (postEngRate > perPerc || postEngRate < crPerc) {
       return "warning";
     } else {
