@@ -117,17 +117,19 @@ function getCurrentTabURL(callback) {
             var moreJson = user;
             while (moreJson.user.media.page_info.has_next_page) {
               moreJson = nextUserPage(url, moreJson.user.media.page_info.end_cursor);
-              console.log(moreJson);
+              user.user.media.nodes = user.user.media.nodes.concat(moreJson.user.media.nodes);
             }
 
           }
+          // for troubleshooting
+          // console.log(user);
 
-          // jsonData.sponsorPosts = sponsorMetrics(user.user.media);
-          // jsonData.engagement.likesPerPost = likesPerPost(user.user.media.nodes).toFixed(2);
-          // jsonData.engagement.commentsPerPost = commentsPerPost(user.user.media.nodes).toFixed(2);
-          // jsonData.engagement.engPerPost = engPerPost(user.user.media.nodes).toFixed(2);
-          // jsonData.engagement.postEngRate = postEngRate(jsonData.engagement.engPerPost, user.user.followed_by.count).toFixed(2);
-          // jsonData.engagement.likeCommentRatio = commentLikeRatio(user).toFixed(2);
+          jsonData.sponsorPosts = sponsorMetrics(user.user.media);
+          jsonData.engagement.likesPerPost = likesPerPost(user.user.media.nodes).toFixed(2);
+          jsonData.engagement.commentsPerPost = commentsPerPost(user.user.media.nodes).toFixed(2);
+          jsonData.engagement.engPerPost = engPerPost(user.user.media.nodes).toFixed(2);
+          jsonData.engagement.postEngRate = postEngRate(jsonData.engagement.engPerPost, user.user.followed_by.count).toFixed(2);
+          jsonData.engagement.likeCommentRatio = commentLikeRatio(user).toFixed(2);
 
           // Capturing the contents of the title tag
           moreTitle = $("title").html();
@@ -333,6 +335,10 @@ function getCurrentTabURL(callback) {
     }
     updateUI();
 
+  });
+
+// Updates to all user data if Mavrck logo is clicked
+  $("#logo").on("click", function() {
     if (moreTitle != $('title').html()) {
       buildMore();
       updateUI();
