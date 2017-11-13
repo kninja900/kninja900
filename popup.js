@@ -300,10 +300,13 @@ function getCurrentTabURL(callback) {
 
 // sending JSON to endpoint - will be Mavrck API
 function sendJSON (json) {
+    var data = JSON.stringify(json);
     $.ajax({
         type: 'post',
+        // Leaving url commented out so we don't hit the database with un-needed users
         // url: "http://app.splashscore.com/instagram-accounts?token=ff7434aab28e342b9e84505f8da8848ba6b0b7245291560fb7f07d5788596cb2c77749ea863140901a1d644fb68104db",  // Mavrck endpoint
-        data: json,
+        data: data,
+        crossDomain: true,
         contentType: 'application/json',
         dataType: 'json',
         success: function(msg) {
@@ -381,10 +384,6 @@ function sendJSON (json) {
     }
     updateUI();
 
-    if (moreTitle != $('title').html()) {
-      buildMore();
-      updateMoreUI();
-    }
   });
 
   $(".icon").on("click", function() {
@@ -404,15 +403,20 @@ function sendJSON (json) {
     updateMoreUI();
   });
 
+  $(".btn").on("click", function() {
+    sendJSON(data);
+  });
+
 
 // Data structure from Mavrck
 var data = {
     source: "TOMAHAWK",
+    sourceDetail: "missle",
+    analysisVersion: 1,
     fullName: "Joe",
     country: "user.country",
     state: "user.state",
     city: "user.city",
-    gender : "",
     birthday : "",
     email : "",
     instagramAccount : {
