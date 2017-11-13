@@ -29,7 +29,7 @@ function getCurrentTabURL(callback) {
       "commentsPerPost": "",
       "engPerPost": "",
       "postEngRate": "",
-      "followers" : "",
+      "fake_followers" : "",
       "likeCommentRatio" : "",
       "perPost" : "",
       "Post" : ""
@@ -40,7 +40,7 @@ function getCurrentTabURL(callback) {
       "commentsPerPost": "",
       "engPerPost": "",
       "postEngRate": "",
-      "followers" : "",
+      "fake_followers" : "",
       "likeCommentRatio" : "",
       "perPost" : "",
       "Post" : ""
@@ -83,6 +83,8 @@ function getCurrentTabURL(callback) {
           jsonData.engagement.engPerPost = engPerPost(user.user.media.nodes).toFixed(2);
           jsonData.engagement.postEngRate = postEngRate(jsonData.engagement.engPerPost, user.user.followed_by.count).toFixed(2);
           jsonData.engagement.likeCommentRatio = commentLikeRatio(user).toFixed(2);
+          jsonData.engagement.fake_followers = engVSFollowers();
+          console.log(jsonData.engagement.fake_followers);
 
           // Determine influencerType
           switch (true) {
@@ -300,7 +302,7 @@ function getCurrentTabURL(callback) {
 function sendJSON (json) {
     $.ajax({
         type: 'post',
-        url: "http://app.splashscore.com/instagram-accounts?token=ff7434aab28e342b9e84505f8da8848ba6b0b7245291560fb7f07d5788596cb2c77749ea863140901a1d644fb68104db",  // Mavrck endpoint
+        // url: "http://app.splashscore.com/instagram-accounts?token=ff7434aab28e342b9e84505f8da8848ba6b0b7245291560fb7f07d5788596cb2c77749ea863140901a1d644fb68104db",  // Mavrck endpoint
         data: json,
         contentType: 'application/json',
         dataType: 'json',
@@ -316,7 +318,6 @@ function sendJSON (json) {
 // Fake followers
   function engVSFollowers() {
     switch (true) {
-      // update percentages
       case jsonData.followers > 1000000:
         return checkOne(jsonData.engagement.postEngRate, 0.0166, 0.0006);
         break;
