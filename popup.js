@@ -9,6 +9,7 @@ function getCurrentTabURL(callback) {
 
 // Initializing the variable title content and explore url
   var title;
+  var moreTitle;
   var explore = 'https://www.instagram.com/explore/';
 
 // Initalizing JSON object, setting up specific data to send to mavrck
@@ -129,7 +130,7 @@ function getCurrentTabURL(callback) {
           // jsonData.engagement.likeCommentRatio = commentLikeRatio(user).toFixed(2);
 
           // Capturing the contents of the title tag
-          title = $("title").html();
+          moreTitle = $("title").html();
 
         } else {
           console.log("There is no json at /?__a=1, within buildMore");
@@ -318,8 +319,11 @@ function getCurrentTabURL(callback) {
       buildJSON();
     }
     updateUI();
-    // this should be under the title check but it causes the UI to load too slowly
-    buildMore();
+
+    if (moreTitle != $('title').html()) {
+      buildMore();
+      updateUI();
+    }
   });
 
   $("body").on("click", function() {
@@ -328,6 +332,9 @@ function getCurrentTabURL(callback) {
       buildJSON();
     }
     updateUI();
-    // this should be under the title check but it causes the UI to load too slowly
-    buildMore();
+
+    if (moreTitle != $('title').html()) {
+      buildMore();
+      updateUI();
+    }
   });
