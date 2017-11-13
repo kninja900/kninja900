@@ -350,6 +350,11 @@ function sendJSON (json) {
     document.getElementById('engRate').innerHTML = jsonData.engagement.engPerPost;
     document.getElementById('avgComments').innerHTML = jsonData.engagement.commentsPerPost;
     document.getElementById('avgLikes').innerHTML =  jsonData.engagement.likesPerPost;
+    if (jsonData.engagement.fake_followers == "good") {
+      $("#fake_followers").hide();
+    } else {
+      $("#fake_followers").show();
+    }
   }
 
   function updateMoreUI() {
@@ -357,6 +362,11 @@ function sendJSON (json) {
     document.getElementById('engRate').innerHTML = jsonData.lifetime_engagement.engPerPost;
     document.getElementById('avgComments').innerHTML = jsonData.lifetime_engagement.commentsPerPost;
     document.getElementById('avgLikes').innerHTML =  jsonData.lifetime_engagement.likesPerPost;
+    if (jsonData.lifetime_engagement.fake_followers == "good") {
+      $("#fake_followers").hide();
+    } else {
+      $("#fake_followers").show();
+    }
   }
 
 // Calling buildJSON to run code on load
