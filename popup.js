@@ -32,6 +32,17 @@ function getCurrentTabURL(callback) {
       "likeCommentRatio" : "",
       "perPost" : "",
       "Post" : ""
+    },
+    "lifetime_sponsorPosts" : "",
+    "lifetime_engagement" : {
+      "likesPerPost": "",
+      "commentsPerPost": "",
+      "engPerPost": "",
+      "postEngRate": "",
+      "followers" : "",
+      "likeCommentRatio" : "",
+      "perPost" : "",
+      "Post" : ""
     }
   };
 
@@ -122,12 +133,12 @@ function getCurrentTabURL(callback) {
           // for troubleshooting
           // console.log(user);
 
-          jsonData.sponsorPosts = sponsorMetrics(user.user.media);
-          jsonData.engagement.likesPerPost = likesPerPost(user.user.media.nodes).toFixed(2);
-          jsonData.engagement.commentsPerPost = commentsPerPost(user.user.media.nodes).toFixed(2);
-          jsonData.engagement.engPerPost = engPerPost(user.user.media.nodes).toFixed(2);
-          jsonData.engagement.postEngRate = postEngRate(jsonData.engagement.engPerPost, user.user.followed_by.count).toFixed(2);
-          jsonData.engagement.likeCommentRatio = commentLikeRatio(user).toFixed(2);
+          jsonData.lifetime_sponsorPosts = sponsorMetrics(user.user.media);
+          jsonData.lifetime_engagement.likesPerPost = likesPerPost(user.user.media.nodes).toFixed(2);
+          jsonData.lifetime_engagement.commentsPerPost = commentsPerPost(user.user.media.nodes).toFixed(2);
+          jsonData.lifetime_engagement.engPerPost = engPerPost(user.user.media.nodes).toFixed(2);
+          jsonData.lifetime_engagement.postEngRate = postEngRate(jsonData.engagement.engPerPost, user.user.followed_by.count).toFixed(2);
+          jsonData.lifetime_engagement.likeCommentRatio = commentLikeRatio(user).toFixed(2);
 
           // Capturing the contents of the title tag
           moreTitle = $("title").html();
@@ -309,6 +320,13 @@ function sendJSON (json) {
     document.getElementById('avgLikes').innerHTML =  jsonData.engagement.likesPerPost;
   }
 
+  function updateMoreUI() {
+    document.getElementById('iType').innerHTML = jsonData.influencerType;
+    document.getElementById('engRate').innerHTML = jsonData.lifetime_engagement.engPerPost;
+    document.getElementById('avgComments').innerHTML = jsonData.lifetime_engagement.commentsPerPost;
+    document.getElementById('avgLikes').innerHTML =  jsonData.lifetime_engagement.likesPerPost;
+  }
+
 // Calling buildJSON to run code on load
   var json = buildJSON();
 
@@ -323,17 +341,25 @@ function sendJSON (json) {
 
     if (moreTitle != $('title').html()) {
       buildMore();
-      updateUI();
+      updateMoreUI();
     }
   });
 
-  $("body").on("click", function() {
+  $(".icon").on("click", function() {
     // or just instagram
     if (title != $('title').html()) {
       buildJSON();
     }
     updateUI();
 
+  });
+
+  // Updates to all user data if Mavrck logo is clicked
+  $("#logo").on("click", function() {
+    if (moreTitle != $('title').html()) {
+      buildMore();
+    }
+    updateMoreUI();
   });
 
 // Updates to all user data if Mavrck logo is clicked
