@@ -318,25 +318,25 @@ function sendJSON (json) {
     switch (true) {
       // update percentages
       case jsonData.followers > 1000000:
-        return checkOne(jsonData.engagement.postEngRate, 0.0166);
+        return checkOne(jsonData.engagement.postEngRate, 0.0166, 0.0006);
         break;
       case jsonData.followers > 100000:
-        return checkOne(jsonData.engagement.postEngRate, 0.0178);
+        return checkOne(jsonData.engagement.postEngRate, 0.0178, 0.0009);
         break;
       case jsonData.followers > 10000:
-        return checkOne(jsonData.engagement.postEngRate, 0.0237);
+        return checkOne(jsonData.engagement.postEngRate, 0.0237, 0.0014);
         break;
       case jsonData.followers > 1000:
-        return checkOne(jsonData.engagement.postEngRate, 0.0404);
+        return checkOne(jsonData.engagement.postEngRate, 0.0404, 0.0027);
         break;
       default:
-        return checkOne(jsonData.engagement.postEngRate, 0.0803);
+        return checkOne(jsonData.engagement.postEngRate, 0.0803, 0.0056);
         break;
     }
   }
 
-  function checkOne(postEngRate, perPerc, commentRate, crPerc) {
-    if (postEngRate > perPerc) {
+  function checkOne(postEngRate, perPerc, crPerc) {
+    if (postEngRate > perPerc || postEngRate < crPerc) {
       return "warning";
     } else {
       return "good";
