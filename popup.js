@@ -29,7 +29,7 @@ function getCurrentTabURL(callback) {
       "commentsPerPost": "",
       "engPerPost": "",
       "postEngRate": "",
-      "followers" : "",
+      "fake_followers" : "",
       "likeCommentRatio" : "",
       "perPost" : "",
       "Post" : ""
@@ -40,7 +40,7 @@ function getCurrentTabURL(callback) {
       "commentsPerPost": "",
       "engPerPost": "",
       "postEngRate": "",
-      "followers" : "",
+      "fake_followers" : "",
       "likeCommentRatio" : "",
       "perPost" : "",
       "Post" : ""
@@ -83,6 +83,7 @@ function getCurrentTabURL(callback) {
           jsonData.engagement.engPerPost = engPerPost(user.user.media.nodes).toFixed(2);
           jsonData.engagement.postEngRate = postEngRate(jsonData.engagement.engPerPost, user.user.followed_by.count).toFixed(2);
           jsonData.engagement.likeCommentRatio = commentLikeRatio(user).toFixed(2);
+          jsonData.engagement.fake_followers = fakeFollowers();
 
           // Determine influencerType
           switch (true) {
@@ -140,6 +141,7 @@ function getCurrentTabURL(callback) {
           jsonData.lifetime_engagement.engPerPost = engPerPost(user.user.media.nodes).toFixed(2);
           jsonData.lifetime_engagement.postEngRate = postEngRate(jsonData.engagement.engPerPost, user.user.followed_by.count).toFixed(2);
           jsonData.lifetime_engagement.likeCommentRatio = commentLikeRatio(user).toFixed(2);
+          jsonData.lifetime_engagement.fake_followers = fakeFollowers();
 
           // Capturing the contents of the title tag
           moreTitle = $("title").html();
@@ -316,12 +318,46 @@ function sendJSON (json) {
     });
 }
 
+// Fake followers
+  function fakeFollowers() {
+    switch (true) {
+      case jsonData.followers > 1000000:
+        return engCheck(jsonData.engagement.postEngRate, 0.0166, 0.0006);
+        break;
+      case jsonData.followers > 100000:
+        return engCheck(jsonData.engagement.postEngRate, 0.0178, 0.0009);
+        break;
+      case jsonData.followers > 10000:
+        return engCheck(jsonData.engagement.postEngRate, 0.0237, 0.0014);
+        break;
+      case jsonData.followers > 1000:
+        return engCheck(jsonData.engagement.postEngRate, 0.0404, 0.0027);
+        break;
+      default:
+        return engCheck(jsonData.engagement.postEngRate, 0.0803, 0.0056);
+        break;
+    }
+  }
+
+  function engCheck(postEngRate, perPerc, crPerc) {
+    if (postEngRate > perPerc || postEngRate < crPerc) {
+      return "warning";
+    } else {
+      return "good";
+    }
+  }
+
 // Update UI
   function updateUI() {
     document.getElementById('iType').innerHTML = jsonData.influencerType;
     document.getElementById('engRate').innerHTML = jsonData.engagement.engPerPost;
     document.getElementById('avgComments').innerHTML = jsonData.engagement.commentsPerPost;
     document.getElementById('avgLikes').innerHTML =  jsonData.engagement.likesPerPost;
+    if (jsonData.engagement.fake_followers == "good") {
+      $("#fake_followers").hide();
+    } else {
+      $("#fake_followers").show();
+    }
   }
 
   function updateMoreUI() {
@@ -329,6 +365,11 @@ function sendJSON (json) {
     document.getElementById('engRate').innerHTML = jsonData.lifetime_engagement.engPerPost;
     document.getElementById('avgComments').innerHTML = jsonData.lifetime_engagement.commentsPerPost;
     document.getElementById('avgLikes').innerHTML =  jsonData.lifetime_engagement.likesPerPost;
+    if (jsonData.lifetime_engagement.fake_followers == "good") {
+      $("#fake_followers").hide();
+    } else {
+      $("#fake_followers").show();
+    }
   }
 
 // Calling buildJSON to run code on load
