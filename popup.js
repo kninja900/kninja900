@@ -322,24 +322,27 @@ function sendJSON (json) {
   function fakeFollowers() {
     switch (true) {
       case jsonData.followers > 1000000:
-        return engCheck(jsonData.engagement.postEngRate, 0.0166, 0.0006);
+        return engCheck(jsonData.engagement.postEngRate, 1.66, 0.06);
         break;
       case jsonData.followers > 100000:
-        return engCheck(jsonData.engagement.postEngRate, 0.0178, 0.0009);
+        return engCheck(jsonData.engagement.postEngRate, 1.78, 0.09);
         break;
       case jsonData.followers > 10000:
-        return engCheck(jsonData.engagement.postEngRate, 0.0237, 0.0014);
+        return engCheck(jsonData.engagement.postEngRate, 2.37, 0.14);
         break;
       case jsonData.followers > 1000:
-        return engCheck(jsonData.engagement.postEngRate, 0.0404, 0.0027);
+        return engCheck(jsonData.engagement.postEngRate, 4.04, 0.27);
         break;
       default:
-        return engCheck(jsonData.engagement.postEngRate, 0.0803, 0.0056);
+        return engCheck(jsonData.engagement.postEngRate, 8.03, 0.56);
         break;
     }
   }
 
   function engCheck(postEngRate, perPerc, crPerc) {
+    console.log("post engagement rate:" + postEngRate);
+    console.log("engRate %:" + perPerc);
+    console.log("comment rate %:" + crPerc);
     if (postEngRate > perPerc || postEngRate < crPerc) {
       return "warning";
     } else {
