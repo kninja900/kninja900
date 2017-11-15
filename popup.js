@@ -50,6 +50,28 @@ function getCurrentTabURL(callback) {
     }
   };
 
+// Data structure from Mavrck
+  var data = {
+      source: "TOMAHAWK",
+      sourceDetail: "missle",
+      analysisVersion: 1,
+      fullName: jsonData.fullName,
+      email : jsonData.email,
+      instagramAccount : {
+          id : jsonData.id,
+          handle : jsonData.handle,
+          followersCount : jsonData.followers,
+          followingCount : jsonData.following,
+          fullName : jsonData.fullName,
+          profilePicture : jsonData.profilePicture,
+          bio : jsonData.bio,
+          mediaCount: jsonData.mediaCount,
+          averageLikes : jsonData.engagement.likesPerPost,
+          averageComments : jsonData.engagement.commentsPerPost,
+          sponsoredPostRate : jsonData.sponsorPosts
+      }
+  }
+
 // Builds JSON object to display data
   function buildJSON() {
     getCurrentTabURL((url) => {
@@ -412,26 +434,3 @@ function getCurrentTabURL(callback) {
   $(".btn").on("click", function() {
     sendJSON(data);
   });
-
-
-// Data structure from Mavrck
-var data = {
-    source: "TOMAHAWK",
-    sourceDetail: "missle",
-    analysisVersion: 1,
-    fullName: jsonData.fullName,
-    email : jsonData.email,
-    instagramAccount : {
-        id : jsonData.id,
-        handle : jsonData.handle,
-        followersCount : jsonData.followers,
-        followingCount : jsonData.following,
-        fullName : jsonData.fullName,
-        profilePicture : jsonData.profilePicture,
-        bio : jsonData.bio,
-        mediaCount: jsonData.mediaCount,
-        averageLikes : 4,
-        averageComments : 4,
-        sponsoredPostRate : 1.44
-    }
-}
