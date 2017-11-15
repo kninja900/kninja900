@@ -188,19 +188,19 @@ function getCurrentTabURL(callback) {
 
 // Updating data object
   function updateData() {
-    data.fullName: jsonData.fullName;
-    data.email : jsonData.email;
-    data.instagramAccount.id : jsonData.id;
-    data.instagramAccount.handle : jsonData.handle;
-    data.instagramAccount.followersCount : jsonData.followers;
-    data.instagramAccount.followingCount : jsonData.following;
-    data.instagramAccount.fullName : jsonData.fullName;
-    data.instagramAccount.profilePicture : jsonData.profilePicture;
-    data.instagramAccount.bio : jsonData.bio;
-    data.instagramAccount.mediaCount: jsonData.mediaCount;
-    data.instagramAccount.averageLikes : jsonData.engagement.likesPerPost;
-    data.instagramAccount.averageComments : jsonData.engagement.commentsPerPost;
-    data.instagramAccount.sponsoredPostRate : jsonData.sponsorPosts;
+    data.fullName = jsonData.fullName;
+    data.email = jsonData.email;
+    data.instagramAccount.id = jsonData.id;
+    data.instagramAccount.handle = jsonData.handle;
+    data.instagramAccount.followersCount = jsonData.followers;
+    data.instagramAccount.followingCount = jsonData.following;
+    data.instagramAccount.fullName = jsonData.fullName;
+    data.instagramAccount.profilePicture = jsonData.profilePicture;
+    data.instagramAccount.bio = jsonData.bio;
+    data.instagramAccount.mediaCount = jsonData.mediaCount;
+    data.instagramAccount.averageLikes = jsonData.engagement.likesPerPost;
+    data.instagramAccount.averageComments = jsonData.engagement.commentsPerPost;
+    data.instagramAccount.sponsoredPostRate = jsonData.sponsorPosts;
   }
 
 // userJson.user.media.nodes every image
@@ -411,7 +411,6 @@ function getCurrentTabURL(callback) {
   }
 
   function updateMoreUI() {
-    document.getElementById('iType').innerHTML = jsonData.influencerType;
     document.getElementById('engRate').innerHTML = jsonData.lifetime_engagement.engPerPost;
     document.getElementById('avgComments').innerHTML = jsonData.lifetime_engagement.commentsPerPost;
     document.getElementById('avgLikes').innerHTML =  jsonData.lifetime_engagement.likesPerPost;
