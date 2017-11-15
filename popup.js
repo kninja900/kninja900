@@ -299,7 +299,7 @@ function getCurrentTabURL(callback) {
   }
 
 // sending JSON to endpoint - will be Mavrck API
-function sendJSON (json) {
+  function sendJSON (json) {
     var data = JSON.stringify(json);
     $.ajax({
         type: 'post',
@@ -417,10 +417,6 @@ var data = {
     sourceDetail: "missle",
     analysisVersion: 1,
     fullName: "Joe",
-    country: "user.country",
-    state: "user.state",
-    city: "user.city",
-    birthday : "",
     email : "",
     instagramAccount : {
         id : "user.id",
