@@ -81,6 +81,7 @@ function getCurrentTabURL(callback) {
           // analyze user here and update jsonData
 
           if (user.user.biography) {
+            jsonData.bio = user.user.biography;
             var email = extractEmails(user.user.biography);
             var website = extractWebsite(user.user.biography);
             if (email) {
@@ -98,10 +99,12 @@ function getCurrentTabURL(callback) {
           }
 
           jsonData.id = user.user.id;
-          jsonData.username = user.user.username;
+          jsonData.handle = user.user.username;
           jsonData.fullname = user.user.full_name;
           jsonData.followers = user.user.followed_by.count;
           jsonData.following = user.user.follows.count;
+          jsonData.profilePicture = user.user.profile_pic_url;
+          jsonData.mediaCount = user.user.media.count;
           jsonData.sponsorPosts = sponsorMetrics(user.user.media);
           jsonData.engagement.likesPerPost = likesPerPost(user.user.media.nodes).toFixed(2);
           jsonData.engagement.commentsPerPost = commentsPerPost(user.user.media.nodes).toFixed(2);
@@ -128,6 +131,8 @@ function getCurrentTabURL(callback) {
 
           // Current data from user. for troubleshooting
           // console.log(jsonData);
+
+          updateData();
 
           // Capturing the contents of the title tag
           title = $("title").html();
