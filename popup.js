@@ -16,12 +16,15 @@ function getCurrentTabURL(callback) {
 // Initalizing JSON object, setting up specific data to send to mavrck
   var jsonData = {
     "id" : "",
-    "username" : "",
-    "fullname" : "",
+    "handle" : "",
+    "fullName" : "",
     "email" : "",
     "website" : "",
     "followers" : "",
     "following" : "",
+    "profilePicture" : "",
+    "bio" : "",
+    "mediaCount" : "",
     "influencerType" : "",
     "sponsorPosts" : "",
     "engagement" : {
@@ -47,6 +50,28 @@ function getCurrentTabURL(callback) {
     }
   };
 
+// Data structure from Mavrck
+  var data = {
+      source: "TOMAHAWK",
+      sourceDetail: "missle",
+      analysisVersion: 1,
+      fullName: jsonData.fullName,
+      email : jsonData.email,
+      instagramAccount : {
+          id : jsonData.id,
+          handle : jsonData.handle,
+          followersCount : jsonData.followers,
+          followingCount : jsonData.following,
+          fullName : jsonData.fullName,
+          profilePicture : jsonData.profilePicture,
+          bio : jsonData.bio,
+          mediaCount: jsonData.mediaCount,
+          averageLikes : jsonData.engagement.likesPerPost,
+          averageComments : jsonData.engagement.commentsPerPost,
+          sponsoredPostRate : jsonData.sponsorPosts
+      }
+  }
+
 // Builds JSON object to display data
   function buildJSON() {
     getCurrentTabURL((url) => {
@@ -56,6 +81,7 @@ function getCurrentTabURL(callback) {
           // analyze user here and update jsonData
 
           if (user.user.biography) {
+            jsonData.bio = user.user.biography;
             var email = extractEmails(user.user.biography);
             var website = extractWebsite(user.user.biography);
             if (email) {
@@ -73,10 +99,12 @@ function getCurrentTabURL(callback) {
           }
 
           jsonData.id = user.user.id;
-          jsonData.username = user.user.username;
+          jsonData.handle = user.user.username;
           jsonData.fullname = user.user.full_name;
           jsonData.followers = user.user.followed_by.count;
           jsonData.following = user.user.follows.count;
+          jsonData.profilePicture = user.user.profile_pic_url;
+          jsonData.mediaCount = user.user.media.count;
           jsonData.sponsorPosts = sponsorMetrics(user.user.media);
           jsonData.engagement.likesPerPost = likesPerPost(user.user.media.nodes).toFixed(2);
           jsonData.engagement.commentsPerPost = commentsPerPost(user.user.media.nodes).toFixed(2);
@@ -103,6 +131,8 @@ function getCurrentTabURL(callback) {
 
           // Current data from user. for troubleshooting
           // console.log(jsonData);
+
+          updateData();
 
           // Capturing the contents of the title tag
           title = $("title").html();
@@ -154,6 +184,23 @@ function getCurrentTabURL(callback) {
         console.log("Not on instagram, within buildMore");
       }
     });
+  }
+
+// Updating data object
+  function updateData() {
+    data.fullName: jsonData.fullName;
+    data.email : jsonData.email;
+    data.instagramAccount.id : jsonData.id;
+    data.instagramAccount.handle : jsonData.handle;
+    data.instagramAccount.followersCount : jsonData.followers;
+    data.instagramAccount.followingCount : jsonData.following;
+    data.instagramAccount.fullName : jsonData.fullName;
+    data.instagramAccount.profilePicture : jsonData.profilePicture;
+    data.instagramAccount.bio : jsonData.bio;
+    data.instagramAccount.mediaCount: jsonData.mediaCount;
+    data.instagramAccount.averageLikes : jsonData.engagement.likesPerPost;
+    data.instagramAccount.averageComments : jsonData.engagement.commentsPerPost;
+    data.instagramAccount.sponsoredPostRate : jsonData.sponsorPosts;
   }
 
 // userJson.user.media.nodes every image
@@ -299,7 +346,7 @@ function getCurrentTabURL(callback) {
   }
 
 // sending JSON to endpoint - will be Mavrck API
-function sendJSON (json) {
+  function sendJSON (json) {
     var data = JSON.stringify(json);
     $.ajax({
         type: 'post',
@@ -376,7 +423,7 @@ function sendJSON (json) {
   }
 
 // Calling buildJSON to run code on load
-  var json = buildJSON();
+  buildJSON();
 
 // This code will execute when elements are modified under the body element
 // update to title and DOMelement subtree
@@ -409,30 +456,3 @@ function sendJSON (json) {
   $(".btn").on("click", function() {
     sendJSON(data);
   });
-
-
-// Data structure from Mavrck
-var data = {
-    source: "TOMAHAWK",
-    sourceDetail: "missle",
-    analysisVersion: 1,
-    fullName: "Joe",
-    country: "user.country",
-    state: "user.state",
-    city: "user.city",
-    birthday : "",
-    email : "",
-    instagramAccount : {
-        id : "user.id",
-        handle : "user.handle",
-        followersCount : 4,
-        followingCount : 4,
-        fullName : "user.fullName",
-        profilePicture : "user.profilePicture",
-        bio : "user.biography",
-        mediaCount: 4,
-        averageLikes : 4,
-        averageComments : 4,
-        sponsoredPostRate : 1.44
-    }
-}
