@@ -181,6 +181,23 @@ function getCurrentTabURL(callback) {
     });
   }
 
+// Updating data object
+  function updateData() {
+    data.fullName: jsonData.fullName;
+    data.email : jsonData.email;
+    data.instagramAccount.id : jsonData.id;
+    data.instagramAccount.handle : jsonData.handle;
+    data.instagramAccount.followersCount : jsonData.followers;
+    data.instagramAccount.followingCount : jsonData.following;
+    data.instagramAccount.fullName : jsonData.fullName;
+    data.instagramAccount.profilePicture : jsonData.profilePicture;
+    data.instagramAccount.bio : jsonData.bio;
+    data.instagramAccount.mediaCount: jsonData.mediaCount;
+    data.instagramAccount.averageLikes : jsonData.engagement.likesPerPost;
+    data.instagramAccount.averageComments : jsonData.engagement.commentsPerPost;
+    data.instagramAccount.sponsoredPostRate : jsonData.sponsorPosts;
+  }
+
 // userJson.user.media.nodes every image
 //userJson.user.media.nodes.length is the size of the array
 // userJson.user.media.nodes[i] object
@@ -401,7 +418,7 @@ function getCurrentTabURL(callback) {
   }
 
 // Calling buildJSON to run code on load
-  var json = buildJSON();
+  buildJSON();
 
 // This code will execute when elements are modified under the body element
 // update to title and DOMelement subtree
