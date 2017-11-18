@@ -212,10 +212,18 @@ function getCurrentTabURL(callback) {
     var sumRatios = 0;
     var nodes = userJson.user.media.nodes.length;
     for (i = 0; i < nodes; i++) {
-      sumRatios += userJson.user.media.nodes[i].likes.count / userJson.user.media.nodes[i].comments.count;
+      var commentCount = userJson.user.media.nodes[i].comments.count;
+      var likeCount = userJson.user.media.nodes[i].likes.count;
+      if (likeCount != 0) {
+        sumRatios += commentCount / likeCount
+      }
     }
-    var avg = sumRatios/nodes;
-      return avg;
+    if (nodes != 0) {
+      var avg = (sumRatios/nodes) * 100;
+    } else {
+      var avg = 0;
+    }
+    return avg;
   }
 
   function sponsorMetrics(userJson){
