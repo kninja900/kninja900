@@ -1,1 +1,52 @@
-<script src="s1.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="stylesheet.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+    <title>Document</title>
+</head>
+<body>
+    <div class="box">
+      <img id="logo" src="images/mavrck_logo_black.png" alt="Mavrck Logo">
+
+      <div class="stat">
+          <img class="icon" src="images/influence.png">
+          <div id="iType"></div>
+          <div class="info">Influencer Rate</div>
+      </div>
+      <div class="stat">
+          <img class="icon" src="images/people.png">
+          <div id="engRate"></div>
+          <div class="info">Engagement Rate</div>
+      </div>
+      <div class="stat">
+          <img class="icon" src="images/blurb.png">
+          <div id="avgComments"></div>
+          <div class="info">Average Comments</div>
+      </div>
+      <div class="stat">
+         <img class="icon" src="images/heart.png">
+         <div id="avgLikes"></div>
+         <div class="info">Average Likes</div>
+      </div>
+      <div class="checks">
+      <div class="stat" id="is_contactable">
+        <img class="icon" id="contactPic" src="images/check.png">
+        <div id="safetyCheck">Contactable</div>
+      </div>
+      <div class="stat" id="fake_followers">
+        <img class="icon" src="images/caution.png">
+        <div id="dangerCheck">Fake Followers</div>
+        </div>
+      </div>
+
+      <div class="btn">Invite</div>
+    </div>
+
+  <script src='./jquery-3.2.1.min.js'></script>
+  <script src='./popup.js'></script>
+</body>
+</html>
