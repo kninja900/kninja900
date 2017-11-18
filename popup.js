@@ -111,7 +111,9 @@ function getCurrentTabURL(callback) {
           jsonData.engagement.engPerPost = engPerPost(user.user.media.nodes).toFixed(2);
           jsonData.engagement.postEngRate = postEngRate(jsonData.engagement.engPerPost, user.user.followed_by.count).toFixed(2);
           jsonData.engagement.likeCommentRatio = commentLikeRatio(user).toFixed(2);
-          jsonData.engagement.fake_followers = fakeFollowers();
+          jsonData.engagement.fake_followers = fakeFollowers(jsonData.engagement.postEngRate, jsonData.followers);
+
+          console.log(jsonData.engagement.fake_followers);
 
           // Determine influencerType
           switch (true) {
@@ -169,9 +171,11 @@ function getCurrentTabURL(callback) {
           jsonData.lifetime_engagement.likesPerPost = likesPerPost(user.user.media.nodes).toFixed(2);
           jsonData.lifetime_engagement.commentsPerPost = commentsPerPost(user.user.media.nodes).toFixed(2);
           jsonData.lifetime_engagement.engPerPost = engPerPost(user.user.media.nodes).toFixed(2);
-          jsonData.lifetime_engagement.postEngRate = postEngRate(jsonData.engagement.engPerPost, user.user.followed_by.count).toFixed(2);
+          jsonData.lifetime_engagement.postEngRate = postEngRate(jsonData.lifetime_engagement.engPerPost, user.user.followed_by.count).toFixed(2);
           jsonData.lifetime_engagement.likeCommentRatio = commentLikeRatio(user).toFixed(2);
-          jsonData.lifetime_engagement.fake_followers = fakeFollowers();
+          jsonData.lifetime_engagement.fake_followers = fakeFollowers(jsonData.lifetime_engagement.postEngRate, jsonData.followers);
+
+          console.log(jsonData.lifetime_engagement.fake_followers);
 
           // Capturing the contents of the title tag
           moreTitle = $("title").html();
@@ -366,22 +370,22 @@ function getCurrentTabURL(callback) {
 }
 
 // Fake followers
-  function fakeFollowers() {
+  function fakeFollowers(postEngRate, followers) {
     switch (true) {
-      case jsonData.followers > 1000000:
-        return engCheck(jsonData.engagement.postEngRate, 1.66, 0.06);
+      case followers > 1000000:
+        return engCheck(postEngRate, 1.66, 0.06);
         break;
-      case jsonData.followers > 100000:
-        return engCheck(jsonData.engagement.postEngRate, 1.78, 0.09);
+      case followers > 100000:
+        return engCheck(postEngRate, 1.78, 0.09);
         break;
-      case jsonData.followers > 10000:
-        return engCheck(jsonData.engagement.postEngRate, 2.37, 0.14);
+      case followers > 10000:
+        return engCheck(postEngRate, 2.37, 0.14);
         break;
-      case jsonData.followers > 1000:
-        return engCheck(jsonData.engagement.postEngRate, 4.04, 0.27);
+      case followers > 1000:
+        return engCheck(postEngRate, 4.04, 0.27);
         break;
       default:
-        return engCheck(jsonData.engagement.postEngRate, 8.03, 0.56);
+        return engCheck(postEngRate, 8.03, 0.56);
         break;
     }
   }
