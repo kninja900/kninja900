@@ -415,6 +415,17 @@ function getCurrentTabURL(callback) {
       $("#fake_followers").show();
     }
 
+    // new: to show or hide image if user is contactable
+    console.log(jsonData);
+    if (jsonData.email) {
+      $("#safetyCheck").text("Contactable");
+      document.getElementById('contactPic').src = "images/check.png";
+    } else {
+      $("#safetyCheck").text("Non Contactable");
+      document.getElementById('contactPic').src = "images/xicon.png";
+    }
+  }
+
     if (!$("#dangerCheck").is(":visible")) {
       $("#fakeRate").hide();
       $("#dangerCheckData").hide();
