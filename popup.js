@@ -10,6 +10,7 @@ function getCurrentTabURL(callback) {
 // Initializing the variable title content and explore url
   var title;
   var moreTitle;
+  var scope;
   var explore = 'https://www.instagram.com/explore/';
   var developer = 'https://www.instagram.com/developer/';
 
@@ -412,6 +413,7 @@ function getCurrentTabURL(callback) {
     } else {
       $("#fake_followers").show();
     }
+    scope = "current";
   }
 
   function updateMoreUI() {
@@ -423,6 +425,7 @@ function getCurrentTabURL(callback) {
     } else {
       $("#fake_followers").show();
     }
+    scope = "lifetime";
   }
 
 // Calling buildJSON to run code on load
@@ -436,7 +439,7 @@ function getCurrentTabURL(callback) {
       buildJSON();
     }
     updateUI();
-
+    buildMore();
   });
 
   $(".icon").on("click", function() {
@@ -458,4 +461,12 @@ function getCurrentTabURL(callback) {
 
   $(".btn").on("click", function() {
     sendJSON(data);
+  });
+
+  $(".fake_followers").on("click", function() {
+    $("#fakeRate").show();
+    $("#dangerCheckData").show();
+    $("#dangerCheck").hide();
+    if (scope == "current") document.getElementById('dangerCheckData').innerHTML =  jsonData.engagement.postEngRate;
+    if (scope == "lifetime") document.getElementById('dangerCheckData').innerHTML =  jsonData.lifetime_engagement.postEngRate;
   });
