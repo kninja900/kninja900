@@ -10,7 +10,6 @@ function getCurrentTabURL(callback) {
 // Initializing the variable title content and explore url
   var title;
   var moreTitle;
-  var scope;
   var explore = 'https://www.instagram.com/explore/';
   var developer = 'https://www.instagram.com/developer/';
 
@@ -114,8 +113,6 @@ function getCurrentTabURL(callback) {
           jsonData.engagement.likeCommentRatio = commentLikeRatio(user).toFixed(2);
           jsonData.engagement.fake_followers = fakeFollowers(jsonData.engagement.postEngRate, jsonData.followers);
 
-          console.log(jsonData.engagement.fake_followers);
-
           // Determine influencerType
           switch (true) {
             case jsonData.followers > 1000000:
@@ -175,8 +172,6 @@ function getCurrentTabURL(callback) {
           jsonData.lifetime_engagement.postEngRate = postEngRate(jsonData.lifetime_engagement.engPerPost, user.user.followed_by.count).toFixed(2);
           jsonData.lifetime_engagement.likeCommentRatio = commentLikeRatio(user).toFixed(2);
           jsonData.lifetime_engagement.fake_followers = fakeFollowers(jsonData.lifetime_engagement.postEngRate, jsonData.followers);
-
-          console.log(jsonData.lifetime_engagement.fake_followers);
 
           // Capturing the contents of the title tag
           moreTitle = $("title").html();
@@ -392,9 +387,6 @@ function getCurrentTabURL(callback) {
   }
 
   function engCheck(postEngRate, perPerc, crPerc) {
-    console.log("post engagement rate:" + postEngRate);
-    console.log("engRate %:" + perPerc);
-    console.log("comment rate %:" + crPerc);
     if (postEngRate > perPerc || postEngRate < crPerc) {
       return "warning";
     } else {
@@ -408,24 +400,36 @@ function getCurrentTabURL(callback) {
     document.getElementById('engRate').innerHTML = jsonData.engagement.engPerPost;
     document.getElementById('avgComments').innerHTML = jsonData.engagement.commentsPerPost;
     document.getElementById('avgLikes').innerHTML =  jsonData.engagement.likesPerPost;
+    document.getElementById('dangerCheckData').innerHTML =  jsonData.engagement.postEngRate;
     if (jsonData.engagement.fake_followers == "good") {
       $("#fake_followers").hide();
     } else {
       $("#fake_followers").show();
     }
-    scope = "current";
-  }
 
+    if (!$("#dangerCheck").is(":visible")) {
+      $("#fakeRate").hide();
+      $("#dangerCheckData").hide();
+      $("#dangerCheck").show();
+    }
+  }
+  
   function updateMoreUI() {
     document.getElementById('engRate').innerHTML = jsonData.lifetime_engagement.engPerPost;
     document.getElementById('avgComments').innerHTML = jsonData.lifetime_engagement.commentsPerPost;
     document.getElementById('avgLikes').innerHTML =  jsonData.lifetime_engagement.likesPerPost;
+    document.getElementById('dangerCheckData').innerHTML =  jsonData.lifetime_engagement.postEngRate;
     if (jsonData.lifetime_engagement.fake_followers == "good") {
       $("#fake_followers").hide();
     } else {
       $("#fake_followers").show();
     }
-    scope = "lifetime";
+
+    if (!$("#dangerCheck").is(":visible")) {
+      $("#fakeRate").hide();
+      $("#dangerCheckData").hide();
+      $("#dangerCheck").show();
+    }
   }
 
 // Calling buildJSON to run code on load
@@ -439,10 +443,13 @@ function getCurrentTabURL(callback) {
       buildJSON();
     }
     updateUI();
-    buildMore();
+
+    if (moreTitle != $('title').html()) {
+      buildMore();
+    }
   });
 
-  $(".icon").on("click", function() {
+  $("#toggle").on("click", function() {
     // or just instagram
     if (title != $('title').html()) {
       buildJSON();
@@ -467,6 +474,4 @@ function getCurrentTabURL(callback) {
     $("#fakeRate").show();
     $("#dangerCheckData").show();
     $("#dangerCheck").hide();
-    if (scope == "current") document.getElementById('dangerCheckData').innerHTML =  jsonData.engagement.postEngRate;
-    if (scope == "lifetime") document.getElementById('dangerCheckData').innerHTML =  jsonData.lifetime_engagement.postEngRate;
   });
