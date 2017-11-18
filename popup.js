@@ -424,7 +424,6 @@ function getCurrentTabURL(callback) {
       $("#safetyCheck").text("Non Contactable");
       document.getElementById('contactPic').src = "images/xicon.png";
     }
-  }
 
     if (!$("#dangerCheck").is(":visible")) {
       $("#fakeRate").hide();
@@ -432,7 +431,7 @@ function getCurrentTabURL(callback) {
       $("#dangerCheck").show();
     }
   }
-  
+
   function updateMoreUI() {
     document.getElementById('engRate').innerHTML = jsonData.lifetime_engagement.engPerPost;
     document.getElementById('avgComments').innerHTML = jsonData.lifetime_engagement.commentsPerPost;
