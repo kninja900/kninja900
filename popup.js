@@ -200,11 +200,7 @@ function getCurrentTabURL(callback) {
     data.instagramAccount.sponsoredPostRate = jsonData.sponsorPosts;
   }
 
-// userJson.user.media.nodes every image
-//userJson.user.media.nodes.length is the size of the array
-// userJson.user.media.nodes[i] object
-//userJson.user.media.nodes[0].comments.count comment count
-//userJson.user.media.nodes[0].likes.count like count
+// Calculating Comment to Like ratio for each post and averaging across posts
   function commentLikeRatio(userJson) {
     var sumRatios = 0;
     var nodes = userJson.user.media.nodes.length;
@@ -223,6 +219,7 @@ function getCurrentTabURL(callback) {
     return avg;
   }
 
+// checking for hashtags that would suggest the user has sponsors
   function sponsorMetrics(userJson){
     var sponsorPostCount = 0;
     var items = userJson.nodes.length;
@@ -244,7 +241,7 @@ function getCurrentTabURL(callback) {
     return sponsorPostCount;
   }
 
-// checks if the user ison instagram.com
+// checks if the user is on instagram.com
   function onInstagram(url) {
     if(url.indexOf("instagram.com") > -1) {
       // alert("you are on an instagram page when you refresh the page");
@@ -253,7 +250,6 @@ function getCurrentTabURL(callback) {
   }
 
 // function for identifying if on user page
-// how is this actually working?  can we make it more specific for user only?
   function onUserPage(url) {
     var exp = "instagram\.com\/([\.a-z0-9_-]+?)\/$";
     var regex = new RegExp(exp); //instagram.com/[user]/
@@ -350,7 +346,7 @@ function getCurrentTabURL(callback) {
     }
   }
 
-// sending JSON to endpoint - will be Mavrck API
+// sending JSON to Mavrck DB
   function sendJSON (json) {
     var data = JSON.stringify(json);
     $.ajax({
