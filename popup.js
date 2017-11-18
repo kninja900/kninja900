@@ -4,9 +4,6 @@ function getCurrentTabURL(callback) {
   });
 }
 
-
-//TODO: Clean up comments and write real documentation on how this was executed at a later time -Erica
-
 // Initializing the variable title content and explore url
   var title;
   var moreTitle;
@@ -371,7 +368,7 @@ function getCurrentTabURL(callback) {
             console.log(msg);
         }
     });
-}
+  }
 
 // Fake followers
   function fakeFollowers(postEngRate, followers) {
