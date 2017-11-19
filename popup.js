@@ -453,17 +453,17 @@ function getCurrentTabURL(callback) {
     var clickCounter = $this.data('clickCounter') || 0;
     clickCounter += 1;
     $this.data('clickCounter', clickCounter);
-    
+    console.log($this.data('clickCounter'));
     if ($this.data('clickCounter') % 2 == 0) {
-      if (moreTitle != $('title').html()) {
-        buildMore();
-      }
-      updateMoreUI();
-    } else {
       if (title != $('title').html()) {
         buildJSON();
       }
       updateUI();
+    } else {
+      if (moreTitle != $('title').html()) {
+        buildMore();
+      }
+      updateMoreUI();
     }
 
   });
