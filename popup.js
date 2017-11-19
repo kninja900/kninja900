@@ -448,20 +448,24 @@ function getCurrentTabURL(callback) {
     }
   });
 
-  $("#toggle").on("click", function() {
-    // or just instagram
-    if (title != $('title').html()) {
-      buildJSON();
+  $(".slider").on("click", function() {
+    var $this = $(this);
+    var clickCounter = $this.data('clickCounter') || 0;
+    clickCounter += 1;
+    $this.data('clickCounter', clickCounter);
+    
+    if ($this.data('clickCounter') % 2 == 0) {
+      if (moreTitle != $('title').html()) {
+        buildMore();
+      }
+      updateMoreUI();
+    } else {
+      if (title != $('title').html()) {
+        buildJSON();
+      }
+      updateUI();
     }
-    updateUI();
-  });
 
-  // Updates to all user data if Mavrck logo is clicked
-  $("#logo").on("click", function() {
-    if (moreTitle != $('title').html()) {
-      buildMore();
-    }
-    updateMoreUI();
   });
 
   $(".btn").on("click", function() {
