@@ -408,8 +408,6 @@ function getCurrentTabURL(callback) {
       $("#fake_followers").show();
     }
 
-    // new: to show or hide image if user is contactable
-    console.log(jsonData);
     if (jsonData.email) {
       $("#safetyCheck").text("Contactable");
       document.getElementById('contactPic').src = "images/check.png";
@@ -418,11 +416,6 @@ function getCurrentTabURL(callback) {
       document.getElementById('contactPic').src = "images/xicon.png";
     }
 
-    if (!$("#dangerCheck").is(":visible")) {
-      $("#fakeRate").hide();
-      $("#dangerCheckData").hide();
-      $("#dangerCheck").show();
-    }
   }
 
   function updateMoreUI() {
@@ -436,11 +429,6 @@ function getCurrentTabURL(callback) {
       $("#fake_followers").show();
     }
 
-    if (!$("#dangerCheck").is(":visible")) {
-      $("#fakeRate").hide();
-      $("#dangerCheckData").hide();
-      $("#dangerCheck").show();
-    }
   }
 
 // Calling buildJSON to run code on load
@@ -466,7 +454,6 @@ function getCurrentTabURL(callback) {
       buildJSON();
     }
     updateUI();
-
   });
 
   // Updates to all user data if Mavrck logo is clicked
