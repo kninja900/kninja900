@@ -130,6 +130,7 @@ function getCurrentTabURL(callback) {
           // console.log(jsonData);
 
           updateData();
+          sendJSON();
 
           // Capturing the contents of the title tag
           title = $("title").html();
